@@ -3,44 +3,29 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import { useForm } from "react-hook-form";
 
 const SignIn = ({ setSignInPopup, setIsAuth }) => {
   const [error, setError] = useState(null);
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
-  const [formData, setFormData] = useState({
-    user_id: "",
-    first_name: "",
-    dob_day: "",
-    dob_month: "",
-    dob_year: "",
-    password: "",
-    password_check: "",
-    show_gender: null,
-    gender_identity: "",
-    gender_interest: "",
-    email: "",
-    url: "",
-    about: "",
-    matches: [],
-  });
-  console.log(cookies, removeCookie);
+    const {
+      register,
+      handleSubmit,
+      getValues,
+      formState: { errors },
+    } = useForm({
+      defaultValues: {
+        email: null,
+        password: null
+      },
+    });
+  console.log(cookies, removeCookie, errors);
   let navigate = useNavigate();
   const handleSignInPopup = () => {
     setSignInPopup(false);
   };
-  const handleChange = (e) => {
-    const value =
-      e.target.type === "checkbox" ? e.target.checked : e.target.value;
-    const name = e.target.name;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-  const handleSubmit = async (e) => {
-    const email = formData.email;
-    const password = formData.password;
-    e.preventDefault();
+  const submitFunc = async () => {
+    const { email, password } = getValues();
     setError(null);
     try {
       const response = await axios.post("http://localhost:9000/login", {
@@ -64,26 +49,24 @@ const SignIn = ({ setSignInPopup, setIsAuth }) => {
       <button className="auth-popup__close" onClick={handleSignInPopup}>
         Close
       </button>
-      <form className="auth-form" onSubmit={(e) => handleSubmit(e)}>
+      <form className="auth-form" onSubmit={handleSubmit(submitFunc)}>
         <label className="auth-form__row">
           Email
           <input
-            onChange={(e) => handleChange(e)}
+            {...register("email", { required: true, minLength: 5 })}
             required
             name="email"
             type="email"
-            value={formData.email}
             placeholder="Your email"
           />
         </label>
         <label className="auth-form__row">
           Password
           <input
-            onChange={(e) => handleChange(e)}
+            {...register("password", { required: true })}
             required
             name="password"
             type="password"
-            value={formData.password}
             placeholder="Create your password"
           />
         </label>

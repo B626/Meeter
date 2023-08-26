@@ -33,7 +33,7 @@ app.post("/signup", async (req, res) => {
     const data = {
       user_id: generatedUserId,
       email: sanitiziedEmail,
-      hashedPassword: hashedPassword,
+      hashed_password: hashedPassword,
     };
     const insertedUser = await users.insertOne(data);
     const token = jwt.sign(insertedUser, sanitiziedEmail, {
@@ -57,7 +57,7 @@ app.post("/login", async (req,res) => {
     const database = client.db("app-data");
     const users = database.collection("users");
     const user = await users.findOne({email})
-    const correctPassword = await bcrypt.compare(password, user.hashedPassword)
+    const correctPassword = await bcrypt.compare(password, user.hashed_password)
     if(user && correctPassword){
       const token = jwt.sign(user, email,{
         expiresIn: 60*24
