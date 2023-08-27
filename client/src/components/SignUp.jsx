@@ -3,12 +3,26 @@ import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
 import PropTypes from "prop-types";
 import axios from "axios";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup.object().shape({
+  email: yup.string().email().required(),
+  password: yup.string().min(4).max(20).required(),
+  password_check: yup
+    .string()
+    .oneOf([yup.ref("password"), null])
+    .min(4)
+    .max(20)
+    .required(),
+  gender_identity: yup.string(),
+  show_gender: yup.boolean(),
+});
 
 const SignUp = ({ setSignUpPopup }) => {
   const {
     register,
     handleSubmit,
-    watch,
     getValues,
     formState: { errors },
   } = useForm({
@@ -19,18 +33,19 @@ const SignUp = ({ setSignUpPopup }) => {
       gender_identity: null,
       show_gender: null,
     },
+    resolver: yupResolver(schema),
   });
-  console.log(watch, errors);
   const [error, setError] = useState(null);
-  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
-  console.log(cookies, removeCookie);
+  const [cookie, setCookie, removeCookie] = useCookies(["user"]);
+
+  console.log(cookie, removeCookie);
 
   const handleSignUpPopup = () => {
     setSignUpPopup((prevState) => !prevState);
   };
 
   const submitFunc = async () => {
-    const {email, password, password_check} = getValues()
+    const { email, password, password_check } = getValues();
     if (password === password_check) {
       setError(null);
       try {
@@ -42,7 +57,8 @@ const SignUp = ({ setSignUpPopup }) => {
         setCookie("UserId", response.data.userId);
         setCookie("AuthToken", response.data.token);
         const success = response.status === 201;
-        success && setError("Account created! You can log in now");
+        success
+          && setError("Account created! You can log in now")
       } catch (err) {
         console.log(err);
       }
@@ -60,32 +76,35 @@ const SignUp = ({ setSignUpPopup }) => {
         <label className="auth-form__row">
           Email
           <input
-            {...register("email", { required: true, minLength: 5 })}
+            {...register("email")}
             name="email"
             type="email"
             id="email"
             placeholder="Your email"
           />
+          <p>{errors.email?.message}</p>
         </label>
         <label className="auth-form__row">
           Password
           <input
-            {...register("password", { required: true })}
+            {...register("password")}
             type="password"
             id="password"
             name="password"
             placeholder="Create your password"
           />
+          <p>{errors.password ? "Password must be at least 4 characters" : ""}</p>
         </label>
         <label className="auth-form__row">
           Confirm Password
           <input
-            {...register("password_check", { required: true })}
+            {...register("password_check")}
             type="password"
             id="password_check"
             name="password_check"
             placeholder="Confirm your password"
           />
+          <p>{errors.password_check ? "Passwords need to match" : ""}</p>
         </label>
         <label className="auth-form__row auth-form-gender-radio">
           Gender

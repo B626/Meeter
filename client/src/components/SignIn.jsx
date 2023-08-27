@@ -1,26 +1,29 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
-import axios from "axios";
 import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import PropTypes from "prop-types";
+import axios from "axios";
+import * as yup from "yup";
+
+const schema = yup.object().shape({
+  email: yup.string().email().required(),
+  password: yup.string().min(4).max(20).required()
+});
 
 const SignIn = ({ setSignInPopup, setIsAuth }) => {
   const [error, setError] = useState(null);
-  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
-    const {
-      register,
-      handleSubmit,
-      getValues,
-      formState: { errors },
-    } = useForm({
-      defaultValues: {
-        email: null,
-        password: null
-      },
-    });
-  console.log(cookies, removeCookie, errors);
-  let navigate = useNavigate();
+  const [cookie, setCookie, removeCookie] = useCookies(["user"]);
+  const { register, handleSubmit, getValues } = useForm({
+    defaultValues: {
+      email: null,
+      password: null,
+    },
+    resolver: yupResolver(schema),
+  });
+  console.log(cookie, removeCookie)
+  const navigate = useNavigate();
   const handleSignInPopup = () => {
     setSignInPopup(false);
   };
@@ -41,6 +44,7 @@ const SignIn = ({ setSignInPopup, setIsAuth }) => {
       setSignInPopup(false);
     } catch (err) {
       console.log(err);
+      setError('Wrong password or email')
     }
   };
   return (
@@ -53,8 +57,7 @@ const SignIn = ({ setSignInPopup, setIsAuth }) => {
         <label className="auth-form__row">
           Email
           <input
-            {...register("email", { required: true, minLength: 5 })}
-            required
+            {...register("email")}
             name="email"
             type="email"
             placeholder="Your email"
@@ -63,8 +66,7 @@ const SignIn = ({ setSignInPopup, setIsAuth }) => {
         <label className="auth-form__row">
           Password
           <input
-            {...register("password", { required: true })}
-            required
+            {...register("password")}
             name="password"
             type="password"
             placeholder="Create your password"

@@ -15,7 +15,7 @@ const Nav = ({
   const navigate = useNavigate();
   const handleLogOut = () => {
     setIsAuth(false);
-    navigate("/")
+    navigate("/");
   };
   const handleSignIn = () => {
     setSignInPopup((prevState) => !prevState);
