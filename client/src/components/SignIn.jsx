@@ -72,7 +72,10 @@ const SignIn = ({ setSignInPopup, setIsAuth }) => {
             placeholder="Create your password"
           />
         </label>
-        <button className="primary-button" type="submit">
+        <button
+          className="primary-button auth-popup__signup-button"
+          type="submit"
+        >
           Sign in
         </button>
         <p className="auth-popup__error">{error}</p>
