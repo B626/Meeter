@@ -2,8 +2,10 @@ import React from "react";
 
 const LearnMorePage = () => {
    return (
-      <h1>Learn More Page</h1>
-   )
+     <div className="container">
+       <h1 className="primary-h1">Learn More Page</h1>
+     </div>
+   );
 }
 
 export default LearnMorePage

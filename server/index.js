@@ -1,28 +1,34 @@
-const PORT = 9000;
 const { MongoClient } = require("mongodb");
 const { v4: uuidv4 } = require("uuid");
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
-const uri =
-  "mongodb+srv://browixxx:UBXkYq2oZpa9UshB@meeter.tbkg9xd.mongodb.net/Meeter?retryWrites=true&w=majority";
+require("dotenv").config();
 
 const app = express();
+
+const uri = process.env.URI;
+const port = process.env.PORT || 8000;
+
+const client = new MongoClient(uri);
+
 app.use(cors());
 app.use(express.json());
+app.use(async (req, res, next) => {
+  await client.connect();
+  next();
+});
 
 app.get("/", (req, res) => {
   res.json("Hello world");
 });
 
 app.post("/signup", async (req, res) => {
-  const client = new MongoClient(uri);
   const { email, password } = req.body;
   const generatedUserId = uuidv4();
   const hashedPassword = await bcrypt.hash(password, 10);
   try {
-    await client.connect();
     const database = client.db("app-data");
     const users = database.collection("users");
     const existingUser = await users.findOne({ email });
@@ -39,7 +45,6 @@ app.post("/signup", async (req, res) => {
     const token = jwt.sign(insertedUser, sanitiziedEmail, {
       expiresIn: 60 * 24,
     });
-
     res
       .status(201)
       .json({ token, userId: generatedUserId, email: sanitiziedEmail });
@@ -49,11 +54,8 @@ app.post("/signup", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-  const client = new MongoClient(uri);
   const { email, password } = req.body;
-  console.log(email, password);
   try {
-    await client.connect();
     const database = client.db("app-data");
     const users = database.collection("users");
     const user = await users.findOne({ email });
@@ -74,16 +76,14 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/users", async (req, res) => {
-  const client = new MongoClient(uri);
   try {
-    await client.connect();
     const database = client.db("app-data");
     const users = database.collection("users");
     const returnedUsers = await users.find().toArray();
     res.send(returnedUsers);
-  } finally {
-    await client.close();
+  } catch (err) {
+    console.log(err);
   }
 });
 
-app.listen(PORT, () => console.log("Server running on port " + PORT));
+app.listen(port, () => console.log("Server running on port " + port));

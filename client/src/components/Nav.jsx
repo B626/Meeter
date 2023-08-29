@@ -1,6 +1,6 @@
 import React from "react";
 
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import PropTypes from "prop-types";
 
@@ -13,13 +13,21 @@ const Nav = ({
   setSignUpPopup,
 }) => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const handleLogOut = () => {
     setIsAuth(false);
     navigate("/");
   };
+  const handleLoginButtonState = () => {
+    if (signUpPopup && pathname === "/") return true;
+    else !!signInPopup;
+    setSignUpPopup(false)
+    setSignInPopup(false)
+  };
   const handleSignIn = () => {
     setSignInPopup((prevState) => !prevState);
-    setSignUpPopup(false);
+    setSignUpPopup(false);  
+    navigate("/")
   };
   return (
     <nav className="nav">
@@ -85,7 +93,7 @@ const Nav = ({
             ) : (
               <button
                 className="primary-button"
-                disabled={signUpPopup ? true : signInPopup ? true : false}
+                disabled={handleLoginButtonState()}
                 onClick={handleSignIn}
               >
                 Sign in

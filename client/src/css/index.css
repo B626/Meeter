@@ -18,6 +18,12 @@ body {
   background: linear-gradient(90deg, rgb(94, 0, 84) 0%, rgb(222, 190, 0) 100%);
 }
 
+.primary-h1 {
+  color: #fff;
+  font-weight: 700;
+  font-size: 72px;
+}
+
 .primary-button {
   font-size: 18px;
   background-color: #b11795;
@@ -101,9 +107,6 @@ body {
   justify-content: center;
 }
 .login__title {
-  font-weight: 700;
-  font-size: 72px;
-  color: #fff;
   margin: 0 0 10px 0;
 }
 .login__inner {
@@ -194,4 +197,9 @@ body {
 }
 .auth-form-checkbox input {
   width: auto;
+}
+.auth-form__error {
+  text-align: left;
+  font-size: 20px;
+  margin: 0 0 10px 0;
 }

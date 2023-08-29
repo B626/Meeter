@@ -19,6 +19,12 @@ body{
   background: linear-gradient(90deg, rgba(94,0,84,1) 0%, rgba(222,190,0,1) 100%);
 }
 
+.primary-h1{
+  color: #fff;
+  font-weight: 700;
+  font-size: 72px;
+}
+
 .primary-button{
   font-size: 18px;
   background-color: #b11795;
@@ -105,9 +111,6 @@ body{
   display: flex;
   justify-content: center;
   &__title{
-    font-weight: 700;
-    font-size: 72px;
-    color: #fff;
     margin: 0 0 10px 0;
   }
   &__inner{
@@ -200,5 +203,10 @@ body{
     & input{
       width: auto;
     }
+  }
+  &__error{
+    text-align:left;
+    font-size: 20px;
+    margin: 0 0 10px 0;
   }
 }

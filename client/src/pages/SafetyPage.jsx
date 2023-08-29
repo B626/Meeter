@@ -2,8 +2,10 @@ import React from "react";
 
 const SafetyPage = () => {
    return (
-      <h1>Safety Page</h1>
-   )
+     <div className="container">
+       <h1 className="primary-h1">Safety Page</h1>
+     </div>
+   );
 }
 
 export default SafetyPage
