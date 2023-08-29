@@ -3,13 +3,15 @@ import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signUpSchema } from "../schemas/SignUpSchema";
-import PropTypes from "prop-types";
+import { setSignUpPopup } from "../redux/slices/authSlice";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 import InputText from "./inputs/InputText";
 import InputRadio from "./inputs/InputRadio";
 import InputCheckbox from "./inputs/InputCheckbox";
 
-const SignUp = ({ setSignUpPopup }) => {
+const SignUp = () => {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -29,7 +31,7 @@ const SignUp = ({ setSignUpPopup }) => {
   const [cookie, setCookie, removeCookie] = useCookies(["user"]);
 
   const handleCloseSignUpPopup = () => {
-    setSignUpPopup(false);
+    dispatch(setSignUpPopup(false));
   };
 
   const submitFunc = async () => {
@@ -109,10 +111,6 @@ const SignUp = ({ setSignUpPopup }) => {
       </form>
     </div>
   );
-};
-
-SignUp.propTypes = {
-  setSignUpPopup: PropTypes.func,
 };
 
 export default SignUp;

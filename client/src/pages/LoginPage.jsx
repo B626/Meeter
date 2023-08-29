@@ -3,21 +3,17 @@ import React from "react";
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
 
-import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import { setSignInPopup, setSignUpPopup } from "../redux/slices/authSlice";
 
-const LoginPage = ({
-  isAuth,
-  setIsAuth,
-  signUpPopup,
-  setSignUpPopup,
-  signInPopup,
-  setSignInPopup,
-}) => {
+const LoginPage = () => {
+  const {isAuth, signInPopup, signUpPopup} = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const handleSignInPopup = () => {
-    setSignInPopup((prevState) => !prevState);
+    dispatch(setSignInPopup((prevState) => !prevState));
   };
   const handleSignUpPopup = () => {
-    setSignUpPopup((prevState) => !prevState);
+    dispatch(setSignUpPopup(true));
   };
   return (
     <div className="login">
@@ -42,25 +38,16 @@ const LoginPage = ({
               </button>
             )}
             {signUpPopup && (
-              <SignUp setSignUpPopup={setSignUpPopup} />
+              <SignUp />
             )}
             {signInPopup && (
-              <SignIn setSignInPopup={setSignInPopup} setIsAuth={setIsAuth} />
+              <SignIn />
             )}
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-LoginPage.propTypes = {
-  isAuth: PropTypes.bool,
-  setIsAuth: PropTypes.func,
-  signUpPopup: PropTypes.bool,
-  setSignUpPopup: PropTypes.func,
-  signInPopup: PropTypes.bool,
-  setSignInPopup: PropTypes.func,
 };
 
 export default LoginPage;

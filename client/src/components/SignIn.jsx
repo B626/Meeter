@@ -4,11 +4,13 @@ import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signInSchema } from "../schemas/SignInSchema";
-import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { setIsAuth, setSignInPopup } from "../redux/slices/authSlice";
 import axios from "axios";
 import InputText from "./inputs/InputText";
 
-const SignIn = ({ setSignInPopup, setIsAuth }) => {
+const SignIn = () => {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -26,7 +28,7 @@ const SignIn = ({ setSignInPopup, setIsAuth }) => {
 
   const navigate = useNavigate();
   const handleCloseSignInPopup = () => {
-    setSignInPopup(false);
+    dispatch(setSignInPopup(false));
   };
   const submitFunc = async () => {
     const { email, password } = getValues();
@@ -41,8 +43,8 @@ const SignIn = ({ setSignInPopup, setIsAuth }) => {
       setCookie("AuthToken", response.data.token);
       const success = response.status === 201;
       if (success) navigate("/dashboard");
-      setIsAuth(true);
-      setSignInPopup(false);
+      dispatch(setIsAuth(true));
+      dispatch(setSignInPopup(false));
     } catch (err) {
       console.log(err);
       setMessage("Wrong password or email");
@@ -84,11 +86,6 @@ const SignIn = ({ setSignInPopup, setIsAuth }) => {
       </form>
     </div>
   );
-};
-
-SignIn.propTypes = {
-  setSignInPopup: PropTypes.func,
-  setIsAuth: PropTypes.func,
 };
 
 export default SignIn;

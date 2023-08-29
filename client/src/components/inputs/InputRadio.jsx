@@ -1,4 +1,3 @@
-import { useForm } from "react-hook-form";
 import PropTypes from "prop-types";
 
 const InputRadio = ({ title, name, values, register }) => {

@@ -1,33 +1,30 @@
 import React from "react";
-
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsAuth, setSignInPopup, setSignUpPopup } from "../redux/slices/authSlice";
 
-import PropTypes from "prop-types";
-
-const Nav = ({
-  isAuth,
-  setIsAuth,
-  signInPopup,
-  signUpPopup,
-  setSignInPopup,
-  setSignUpPopup,
-}) => {
+const Nav = () => {
+  const { isAuth, signInPopup, signUpPopup } = useSelector(
+    (state) => state.auth
+  );
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const handleLogOut = () => {
-    setIsAuth(false);
+    dispatch(setIsAuth(false));
     navigate("/");
   };
   const handleLoginButtonState = () => {
-    if (signUpPopup && pathname === "/") return true;
-    else !!signInPopup;
-    setSignUpPopup(false)
-    setSignInPopup(false)
+    if (signUpPopup && pathname === "/" || signInPopup){
+      return true;
+    } else {
+      return false
+    }
   };
   const handleSignIn = () => {
-    setSignInPopup((prevState) => !prevState);
-    setSignUpPopup(false);  
-    navigate("/")
+    dispatch(setSignInPopup(true));
+    dispatch(setSignUpPopup(false))
+    navigate("/");
   };
   return (
     <nav className="nav">
@@ -92,8 +89,8 @@ const Nav = ({
               </button>
             ) : (
               <button
-                className="primary-button"
                 disabled={handleLoginButtonState()}
+                className="primary-button"
                 onClick={handleSignIn}
               >
                 Sign in
@@ -104,15 +101,6 @@ const Nav = ({
       </div>
     </nav>
   );
-};
-
-Nav.propTypes = {
-  isAuth: PropTypes.bool,
-  setIsAuth: PropTypes.func,
-  signInPopup: PropTypes.bool,
-  signUpPopup: PropTypes.bool,
-  setSignInPopup: PropTypes.func,
-  setSignUpPopup: PropTypes.func,
 };
 
 export default Nav;

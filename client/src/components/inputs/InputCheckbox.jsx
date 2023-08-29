@@ -1,4 +1,3 @@
-import { useForm } from "react-hook-form";
 import PropTypes from "prop-types";
 
 const InputCheckbox = ({ title, name, register }) => {
