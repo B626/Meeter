@@ -1,6 +1,15 @@
+import React from "react";
 import PropTypes from "prop-types";
 
-const InputText = ({ title, name, type, placeholder, register, error, errorMsg }) => {
+const InputText = ({
+  title,
+  name,
+  type,
+  placeholder,
+  register,
+  error,
+  errorMsg,
+}) => {
   return (
     <>
       <label className="auth-form__row">
@@ -16,16 +25,6 @@ const InputText = ({ title, name, type, placeholder, register, error, errorMsg }
       <p className="auth-form__error">{error && errorMsg}</p>
     </>
   );
-};
-
-InputText.propTypes = {
-  title: PropTypes.string,
-  name: PropTypes.string,
-  type: PropTypes.string,
-  placeholder: PropTypes.string,
-  register: PropTypes.func,
-  error: PropTypes.object,
-  errorMsg: PropTypes.string
 };
 
 export default InputText;

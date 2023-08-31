@@ -18,15 +18,9 @@ const SignUp = () => {
     getValues,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      email: null,
-      password: null,
-      password_check: null,
-      gender_identity: null,
-      show_gender: null,
-    },
     resolver: yupResolver(signUpSchema),
   });
+  console.log(register)
   const [message, setMessage] = useState(null);
   const [cookie, setCookie, removeCookie] = useCookies(["user"]);
 
@@ -98,7 +92,6 @@ const SignUp = () => {
         <InputCheckbox
           title={"Show my gender"}
           name={"show_gender"}
-          type={"checkbox"}
           register={register}
         />
         <button

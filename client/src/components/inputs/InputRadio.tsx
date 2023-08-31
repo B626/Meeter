@@ -1,3 +1,4 @@
+import React from "react";
 import PropTypes from "prop-types";
 
 const InputRadio = ({ title, name, values, register }) => {
@@ -22,13 +23,6 @@ const InputRadio = ({ title, name, values, register }) => {
       </div>
     </label>
   );
-};
-
-InputRadio.propTypes = {
-  title: PropTypes.string,
-  name: PropTypes.string,
-  values: PropTypes.array,
-  register: PropTypes.func
 };
 
 export default InputRadio;
