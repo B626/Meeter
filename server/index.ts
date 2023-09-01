@@ -15,16 +15,16 @@ const client = new MongoClient(uri);
 
 app.use(cors());
 app.use(express.json());
-app.use(async (req, res, next) => {
+app.use(async (req:any, res:any, next:any) => {
   await client.connect();
   next();
 });
 
-app.get("/", (req, res) => {
-  res.json("Hello world");
+app.get("/", (req: any, res: any) => {
+  res.json("Hello world", req, res);
 });
 
-app.post("/signup", async (req, res) => {
+app.post("/signup", async (req:any, res:any) => {
   const { email, password } = req.body;
   const generatedUserId = uuidv4();
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -53,7 +53,7 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
+app.post("/login", async (req:any, res:any) => {
   const { email, password } = req.body;
   try {
     const database = client.db("app-data");
@@ -75,7 +75,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/users", async (req, res) => {
+app.get("/users", async (req:any, res:any) => {
   try {
     const database = client.db("app-data");
     const users = database.collection("users");

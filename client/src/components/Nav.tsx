@@ -1,13 +1,13 @@
 import React from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { setIsAuth, setSignInPopup, setSignUpPopup } from "../redux/slices/authSlice";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 
 const Nav = () => {
-  const { isAuth, signInPopup, signUpPopup } = useSelector(
+  const { isAuth, signInPopup, signUpPopup } = useAppSelector(
     (state) => state.auth
   );
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const handleLogOut = () => {

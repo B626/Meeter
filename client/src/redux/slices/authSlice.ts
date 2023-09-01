@@ -1,6 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from '@reduxjs/toolkit'
+import type { RootState } from '../store'
 
-const initialState = {
+interface AuthState {
+  isAuth: boolean,
+  user: object,
+  signInPopup: boolean,
+  signUpPopup: boolean
+}
+
+const initialState: AuthState = {
   isAuth: false,
   user: {},
   signInPopup: false,
@@ -17,18 +26,20 @@ export const authSlice = createSlice({
     //  incrementByAmount: (state, action) => {
     //    state.value += action.payload;
     //  },
-    setIsAuth: (state, action) => {
+    setIsAuth: (state, action: PayloadAction<boolean>) => {
       state.isAuth = action.payload;
     },
-    setSignInPopup: (state, action) => {
+    setSignInPopup: (state, action: PayloadAction<boolean>) => {
       state.signInPopup = action.payload;
     },
-    setSignUpPopup: (state, action) => {
+    setSignUpPopup: (state, action: PayloadAction<boolean>) => {
       state.signUpPopup = action.payload;
     },
   },
 });
 
 export const { setIsAuth, setSignInPopup, setSignUpPopup } = authSlice.actions;
+
+export const selectCount = (state: RootState) => state.auth
 
 export default authSlice.reducer;

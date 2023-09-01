@@ -1,5 +1,14 @@
 import React from "react";
-import PropTypes from "prop-types";
+
+interface InputTextProps {
+  title: string
+  name: string,
+  type: string,
+  placeholder: string,
+  register: Function,
+  error: undefined | Object,
+  errorMsg: string
+}
 
 const InputText = ({
   title,
@@ -9,7 +18,7 @@ const InputText = ({
   register,
   error,
   errorMsg,
-}) => {
+}:InputTextProps) => {
   return (
     <>
       <label className="auth-form__row">

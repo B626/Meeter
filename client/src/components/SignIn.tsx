@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { useForm } from "react-hook-form";
+import { useForm, Resolver } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signInSchema } from "../schemas/SignInSchema";
 import { useDispatch } from "react-redux";
@@ -17,17 +17,13 @@ const SignIn = () => {
     getValues,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      email: null,
-      password: null,
-    },
-    resolver: yupResolver(signInSchema),
+    resolver: yupResolver(signInSchema)
   });
-  const [message, setMessage] = useState(null);
-  const [cookie, setCookie, removeCookie] = useCookies(["user"]);
+  const [message, setMessage] = useState<string | null>(null);
+  const [cookie, setCookie, removeCookie] = useCookies<any>(["user"]);
 
   const navigate = useNavigate();
-  const handleCloseSignInPopup = () => {
+  const handleCloseSignInPopup = () => { 
     dispatch(setSignInPopup(false));
   };
   const submitFunc = async () => {
@@ -63,7 +59,7 @@ const SignIn = () => {
           type={"email"}
           placeholder={"Type your email"}
           register={register}
-          error={errors.email}
+          error={errors?.email}
           errorMsg={"This is not an email"}
         />
 

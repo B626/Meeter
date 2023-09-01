@@ -3,14 +3,14 @@ import React from "react";
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
 
-import { useDispatch, useSelector } from "react-redux";
 import { setSignInPopup, setSignUpPopup } from "../redux/slices/authSlice";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 
 const LoginPage = () => {
-  const {isAuth, signInPopup, signUpPopup} = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
+  const {isAuth, signInPopup, signUpPopup} = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
   const handleSignInPopup = () => {
-    dispatch(setSignInPopup((prevState) => !prevState));
+    dispatch(setSignInPopup(true));
   };
   const handleSignUpPopup = () => {
     dispatch(setSignUpPopup(true));

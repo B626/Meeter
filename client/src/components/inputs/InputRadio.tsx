@@ -1,7 +1,13 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-const InputRadio = ({ title, name, values, register }) => {
+interface InputRadioProps {
+  title: string
+  name: string,
+  values: String[],
+  register: Function
+}
+
+const InputRadio = ({ title, name, values, register }: InputRadioProps) => {
   return (
     <label className="auth-form__row auth-form-gender-radio">
       {title}

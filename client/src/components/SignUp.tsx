@@ -21,8 +21,8 @@ const SignUp = () => {
     resolver: yupResolver(signUpSchema),
   });
   console.log(register)
-  const [message, setMessage] = useState(null);
-  const [cookie, setCookie, removeCookie] = useCookies(["user"]);
+  const [message, setMessage] = useState<string | null>(null);
+  const [cookie, setCookie, removeCookie] = useCookies<any>(["user"]);
 
   const handleCloseSignUpPopup = () => {
     dispatch(setSignUpPopup(false));
