@@ -6,6 +6,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const app = express();
@@ -13,9 +14,19 @@ const app = express();
 const uri = process.env.URI;
 const port = process.env.PORT || 8000;
 
+const secretOrPublicKey = 'secretOrPublicKey';
+
 const client = new MongoClient(uri);
 
-app.use(cors());
+app.use(cookieParser());
+
+const corsConfig = {
+    origin: true,
+    credentials: true,
+};
+
+app.use(cors(corsConfig));
+app.options('*', cors(corsConfig))
 app.use(express.json());
 app.use(async (req: Request, res: Response, next: NextFunction) => {
     await client.connect();
@@ -58,17 +69,18 @@ app.post("/login", async (req: Request, res: Response) => {
     try {
         const database = client.db("app-data");
         const users = database.collection("users");
-        const user = await users.findOne({email});
+        const {hashed_password, ...user} = await users.findOne({email});
         const correctPassword = await bcrypt.compare(
             password,
-            user.hashed_password
+            hashed_password
         );
         if (user && correctPassword) {
-            // todo change user to user_id
-            const token = jwt.sign(user, email, {
+            const token = jwt.sign(user, secretOrPublicKey, {
                 expiresIn: 60 * 24,
             });
-            res.status(201).json({token, userId: user.user_id, email});
+
+            res.cookie('authToken', token, {maxAge: 900000, httpOnly: true});
+            res.status(201).json({token, user});
         }
         res.status(400).send("Invalid Credentials");
     } catch (err) {
@@ -89,6 +101,13 @@ app.get("/users", async (req: Request, res: Response) => {
 
 app.get("/user", async (req: Request, res: Response) => {
     try {
+        const {authToken} = req.cookies;
+        if (!authToken) res.status(401).send("Not Authorized");
+        const {email} = await jwt.verify(authToken, secretOrPublicKey);
+        const database = client.db("app-data");
+        const users = database.collection("users");
+        const {hashed_password, ...rest} = await users.findOne({email});
+        res.status(200).json(rest);
 
     } catch (err) {
     }

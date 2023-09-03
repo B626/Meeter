@@ -6,10 +6,11 @@ import axios from "axios";
 const reducerName = 'auth';
 
 export const loadUser = createAsyncThunk(`${reducerName}/loadUser`, async () => {
+    const {data} = await axios.get('http://localhost:9000/user', {
+        withCredentials: true,
+    });
 
-    const user = await axios.get('http://localhost:9000/user');
-
-    return user
+    return data
 });
 
 
@@ -29,12 +30,15 @@ export const authSlice = createSlice({
     initialState,
     extraReducers: (builder) => {
         builder.addCase(loadUser.pending, (state) => {
+            state.isAuth = false;
             state.user = null;
         });
         builder.addCase(loadUser.fulfilled, (state, {payload}) => {
+            state.isAuth = true;
             state.user = payload;
         });
         builder.addCase(loadUser.rejected, (state) => {
+            state.isAuth = false;
             state.user = null;
         });
     },
