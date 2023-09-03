@@ -18,11 +18,13 @@ export const loadUser = createAsyncThunk(`${reducerName}/loadUser`, async () => 
 interface AuthState {
     isAuth: boolean,
     user: Record<string, unknown> | null | any,
+    isLoaded: boolean;
 }
 
 const initialState: AuthState = {
     isAuth: false,
-    user: {},
+    user: null,
+    isLoaded: false
 };
 
 export const authSlice = createSlice({
@@ -31,14 +33,17 @@ export const authSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(loadUser.pending, (state) => {
             state.isAuth = false;
+            state.isLoaded = false
             state.user = null;
         });
         builder.addCase(loadUser.fulfilled, (state, {payload}) => {
             state.isAuth = true;
+            state.isLoaded = true;
             state.user = payload;
         });
         builder.addCase(loadUser.rejected, (state) => {
             state.isAuth = false;
+            state.isLoaded = true;
             state.user = null;
         });
     },
@@ -54,7 +59,8 @@ export const authSlice = createSlice({
 
 export const {setIsAuth, setUser} = authSlice.actions;
 
-export const getUser = (state: RootState) => state.auth.user;
-export const getIsAuth = (state: RootState) => state.auth.isAuth;
+export const getUser = (state: RootState) => state[reducerName].user;
+export const getIsAuth = (state: RootState) => state[reducerName].isAuth;
+export const getIsLoaded = (state: RootState) => state[reducerName].isLoaded;
 
 export default authSlice.reducer;

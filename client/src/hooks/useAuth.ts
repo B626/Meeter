@@ -1,11 +1,9 @@
-import {useEffect} from "react";
-
 import {useAppDispatch, useAppSelector} from "../redux/hooks";
-import {getIsAuth, setIsAuth, setUser} from "../redux/slices";
+import {getIsAuth, getIsLoaded, setIsAuth, setUser} from "../redux/slices";
 
 export const useAuth = () => {
     const isAuth = useAppSelector(getIsAuth);
-
+    const isLoaded = useAppSelector(getIsLoaded);
     const dispatch = useAppDispatch();
 
     const handleIsAuth = (value: boolean) => dispatch(setIsAuth(value));
@@ -14,6 +12,7 @@ export const useAuth = () => {
     return {
         handleIsAuth,
         handleUser,
-        isAuth
+        isAuth,
+        isLoaded
     }
 }

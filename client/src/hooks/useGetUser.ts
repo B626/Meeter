@@ -8,7 +8,6 @@ export const useGetUser = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-
         dispatch(loadUser());
     }, [dispatch]);
 
