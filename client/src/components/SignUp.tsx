@@ -14,7 +14,6 @@ const SignUp = () => {
     const {handleSignUpPopup} = usePopUps();
 
     const [message, setMessage] = useState<string | null>(null);
-    const [cookie, setCookie, removeCookie] = useCookies<any>(["user"]);
 
     const handleCloseSignUpPopup = () => handleSignUpPopup(false)
 
@@ -26,6 +25,8 @@ const SignUp = () => {
                 await axios.post("http://localhost:9000/signup", {
                     email,
                     password,
+                },{
+                    withCredentials:true
                 });
                 setMessage("Account created! You can log in now");
             } catch (err) {

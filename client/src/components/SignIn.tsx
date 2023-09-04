@@ -12,13 +12,12 @@ const SignIn = () => {
     const {errors, register, handleSubmit, getValues} = useValidation({schema: signInSchema})
 
     const [message, setMessage] = useState<string | null>(null);
-    const [cookie, setCookie, removeCookie] = useCookies<any>(["user"]);
 
     const navigate = useNavigate();
 
 
     const {handleSignInPopup} = usePopUps();
-    const {handleIsAuth,handleUser} = useAuth();
+    const {handleIsAuth, handleUser} = useAuth();
 
 
     const handleCloseSignInPopup = () => handleSignInPopup(false);
@@ -31,8 +30,9 @@ const SignIn = () => {
             const response = await axios.post("http://localhost:9000/login", {
                 email,
                 password,
+            }, {
+                withCredentials: true
             });
-            setCookie("authToken", response.data.token);
             handleUser(response.data.user);
             handleIsAuth(true)
             handleCloseSignInPopup();
