@@ -17,6 +17,7 @@
     "jsonwebtoken": "^9.0.1",
     "mongodb": "^5.8.1",
     "nodemon": "^3.0.1",
+    "react-cookie": "^6.1.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

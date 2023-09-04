@@ -44,7 +44,6 @@ app.post("/signup", async (req: Request, res: Response) => {
             hashed_password: hashedPassword,
         };
         await users.insertOne(data);
-
         res
             .status(201)
             .json({userId: generatedUserId, email: sanitiziedEmail});
@@ -91,6 +90,7 @@ app.get("/user", async (req: Request, res: Response) => {
     try {
 
     } catch (err) {
+
     }
 });
 

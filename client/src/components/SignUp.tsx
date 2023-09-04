@@ -9,8 +9,6 @@ import {usePopUps} from "../hooks/usePopUps";
 import {useValidation} from "../hooks/useValidation";
 
 const SignUp = () => {
-
-
     const {errors, register, handleSubmit, getValues} = useValidation({schema: signUpSchema})
 
     const {handleSignUpPopup} = usePopUps();
