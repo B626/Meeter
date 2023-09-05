@@ -1,13 +1,13 @@
 import React from "react";
 import { useValidation } from "../../hooks/useValidation";
 import { useFormController } from "../../hooks/useFormController";
-import { Controller } from "react-hook-form";
+import { Controller, useController } from "react-hook-form";
 
 interface InputTextProps {
   title: string
   name: string,
   type: string,
-  value: null | string,
+  control: any,
   placeholder: string,
   register: Function,
   error: null | Object | undefined,
@@ -18,12 +18,24 @@ const InputText = ({
   title,
   name,
   type,
-  value,
+  control,
   placeholder,
   register,
   error,
   errorMsg,
 }:InputTextProps) => {
+  console.log(error, errorMsg)
+  const {
+    field,
+    fieldState: { invalid, isTouched, isDirty },
+    formState: { touchedFields, dirtyFields }
+  } = useController({
+    name,
+    control,
+    rules: { required: true },
+  });
+
+  const [value, setValue] = React.useState(String(field.value));
 
   return (
     <>
@@ -36,15 +48,13 @@ const InputText = ({
             value={value}
             placeholder={placeholder}
             {...register(name)}
+            onChange={(e) => {
+                field.onChange(parseInt(e.target.value, 10)); 
+                setValue(e.target.value);
+              }
+            }
+            onBlur={field.onBlur}
           />
-          {/* <Controller {...{control, register, name, rules:{}, render: () => <input
-            name={name}
-            type={type}
-            id={name}
-            value={value}
-            placeholder={placeholder}
-            {...register(name)}
-          />}}/> */}
       </label>
       <p className="auth-form__error">{error && errorMsg}</p>
     </>

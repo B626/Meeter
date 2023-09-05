@@ -1,7 +1,7 @@
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 
-export const useValidation = ({schema}: { schema: any }) => {
+export const useValidation = ({userData, schema}: { userData?: any, schema: any }) => {
     const {
         register,
         handleSubmit,
@@ -9,6 +9,11 @@ export const useValidation = ({schema}: { schema: any }) => {
         control,
         formState: {errors},
     } = useForm({
+        defaultValues: {
+            email: userData ? userData.email : "",
+            password: userData ? userData.password : "",
+            password_check: ""
+        },
         resolver: yupResolver(schema),
     });
 

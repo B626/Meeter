@@ -7,33 +7,30 @@ import { onboardingSchema } from "../schemas/OnboardingSchema";
 import axios from "axios";
 
 const OnboardingPage = () => {
-  const { errors, register, handleSubmit, getValues, control } = useValidation({
-    schema: onboardingSchema,
-  });
-  
-  const [userData, setUserData] = useState<Object | null>(null)
+  const [userData, setUserData] = useState<Object | null>(null);
 
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
     try {
-      axios.get(
-        "http://localhost:9000/user",
-        {
+      axios
+        .get("http://localhost:9000/user", {
           withCredentials: true,
-        }
-      ).then(res => {
-         setUserData(res.data)
-      })
+        })
+        .then((res) => {
+          setUserData(res.data);
+        });
     } catch (err) {
       console.log(err);
     }
   }, []);
 
+  const { errors, register, handleSubmit, getValues, control } = useValidation({
+    userData: userData,
+    schema: onboardingSchema,
+  });
 
-  const submitFunc = async () => {
-
-  };
+  const submitFunc = async () => {};
 
   return (
     <div className="onboarding">
@@ -45,7 +42,7 @@ const OnboardingPage = () => {
               title={"Your name"}
               name={"first_name"}
               type={"text"}
-              value={null}
+              control={control}
               placeholder={"Type your name"}
               register={register}
               error={errors.email}
@@ -55,7 +52,7 @@ const OnboardingPage = () => {
               title={"Email"}
               name={"email"}
               type={"email"}
-              value={null}
+              control={control}
               placeholder={"Type your email"}
               register={register}
               error={errors.email}
@@ -65,13 +62,13 @@ const OnboardingPage = () => {
               title={"Password"}
               name={"password"}
               type={"password"}
-              value={null}
+              control={control}
               placeholder={"Create your password"}
               register={register}
               error={errors.password}
               errorMsg={"Password must be at least 4 characters"}
             />
-            <div className="onboarding__row">
+            {/* <div className="onboarding__row">
               <InputText
                 title={"Day"}
                 name={"dob_day"}
@@ -79,7 +76,7 @@ const OnboardingPage = () => {
                 value={null}
                 placeholder={"Day of birth"}
                 register={register}
-                error={errors.password_check}
+                error={errors.dob_day}
                 errorMsg={""}
               />
               <InputText
@@ -102,12 +99,13 @@ const OnboardingPage = () => {
                 error={errors.password_check}
                 errorMsg={""}
               />
-            </div>
+            </div> */}
             <InputText
               title={"Bio"}
               name={"about"}
               type={"text"}
-              value={null}
+
+              control={control}
               placeholder={"Tell something about yourself"}
               register={register}
               error={errors.password}

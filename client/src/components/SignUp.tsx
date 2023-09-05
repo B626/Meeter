@@ -9,7 +9,7 @@ import {usePopUps} from "../hooks/usePopUps";
 import {useValidation} from "../hooks/useValidation";
 
 const SignUp = () => {
-    const {errors, register, handleSubmit, getValues} = useValidation({schema: signUpSchema})
+    const {errors, register, handleSubmit, getValues, control} = useValidation({schema: signUpSchema})
 
     const {handleSignUpPopup} = usePopUps();
 
@@ -47,7 +47,7 @@ const SignUp = () => {
             title={"Email"}
             name={"email"}
             type={"email"}
-            value={""}
+            control={control}
             placeholder={"Type your email"}
             register={register}
             error={errors.email}
@@ -57,7 +57,7 @@ const SignUp = () => {
             title={"Password"}
             name={"password"}
             type={"password"}
-            value={""}
+            control={control}
             placeholder={"Create your password"}
             register={register}
             error={errors.password}
@@ -67,7 +67,7 @@ const SignUp = () => {
             title={"Confirm Password"}
             name={"password_check"}
             type={"password"}
-            value={""}
+            control={control}
             placeholder={"Confirm your password"}
             register={register}
             error={errors.password_check}

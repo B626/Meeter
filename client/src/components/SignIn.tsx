@@ -9,7 +9,7 @@ import {useAuth} from "../hooks/useAuth";
 import {useValidation} from "../hooks/useValidation";
 
 const SignIn = () => {
-    const {errors, register, handleSubmit, getValues} = useValidation({schema: signInSchema})
+    const {errors, register, handleSubmit, getValues, control} = useValidation({schema: signInSchema})
 
     const [message, setMessage] = useState<string | null>(null);
 
@@ -52,7 +52,7 @@ const SignIn = () => {
             title={"Email"}
             name={"email"}
             type={"email"}
-            value={""}
+            control={control}
             placeholder={"Type your email"}
             register={register}
             error={errors?.email}
@@ -63,7 +63,7 @@ const SignIn = () => {
             title={"Password"}
             name={"password"}
             type={"password"}
-            value={""}
+            control={control}
             placeholder={"Type your password"}
             register={register}
             error={errors.password}
