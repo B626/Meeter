@@ -8,12 +8,14 @@ import SupportPage from "./pages/SupportPage";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import { Route, Routes } from "react-router-dom";
 import NotFoundPage from "./pages/NotFoundPage";
+import OnboardingPage from "./pages/OnboardingPage";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />
       <Route element={<ProtectedRoutes />}>
+        <Route path="/onboarding" element={<OnboardingPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/learnmore" element={<LearnMorePage />} />
         <Route path="/products" element={<ProductsPage />} />

@@ -6,6 +6,7 @@ export const useValidation = ({schema}: { schema: any }) => {
         register,
         handleSubmit,
         getValues,
+        control,
         formState: {errors},
     } = useForm({
         resolver: yupResolver(schema),
@@ -15,6 +16,7 @@ export const useValidation = ({schema}: { schema: any }) => {
         errors,
         register,
         handleSubmit,
-        getValues,
+        getValues, 
+        control
     }
 }

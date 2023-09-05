@@ -1,37 +1,38 @@
 import React from "react";
-import {NavLink, useLocation, useNavigate} from "react-router-dom";
-import {usePopUps} from "../hooks/usePopUps";
-import {useAuth} from "../hooks/useAuth";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { usePopUps } from "../hooks/usePopUps";
+import { useAuth } from "../hooks/useAuth";
 
 const LoginNav = () => {
-    const {handleSignInPopup, handleSignUpPopup, signUpPopup, signInPopup} = usePopUps();
-    const {handleIsAuth, isAuth} = useAuth();
+  const { handleSignInPopup, handleSignUpPopup, signUpPopup, signInPopup } =
+    usePopUps();
+  const { handleIsAuth, isAuth } = useAuth();
 
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
 
-    const navigate = useNavigate();
-    const {pathname} = useLocation();
+  const handleLogOut = () => {
+    handleIsAuth(false);
+    // todo add endpoint on the backend to clear cookie authToken
+    navigate("/");
+  };
+  const handleLoginButtonState = () =>
+    !!((signUpPopup && pathname === "/") || signInPopup);
 
-    const handleLogOut = () => {
-        handleIsAuth(false);
-        // todo add endpoint on the backend to clear cookie authToken
-        navigate("/");
-    };
-    const handleLoginButtonState = () => !!((signUpPopup && pathname === "/") || signInPopup);
-
-    const handleSignIn = () => {
-        handleSignInPopup(true);
-        handleSignUpPopup(false);
-        navigate("/");
-    };
-    return (
-        <nav className="nav">
-            <div className="container">
-                <div className="nav__inner">
-                    <div className="nav__left">
-                        <NavLink className="logo" to={"/"}>
-                            <p className="logo__text">Meeter</p>
-                        </NavLink>
-                        {/* <ul className="menu">
+  const handleSignIn = () => {
+    handleSignInPopup(true);
+    handleSignUpPopup(false);
+    navigate("/");
+  };
+  return (
+    <nav className="nav">
+      <div className="container">
+        <div className="nav__inner">
+          <div className="nav__left">
+            <NavLink className="logo" to={"/"}>
+              <p className="logo__text">Meeter</p>
+            </NavLink>
+            {/* <ul className="menu">
               <li className="menu__item">
                 <NavLink
                   className={({ isActive }) =>
@@ -73,31 +74,31 @@ const LoginNav = () => {
                 </NavLink>
               </li>
             </ul> */}
-                    </div>
-                    <div className="nav__right">
-                        <button className="nav__link">Language</button>
-                        {isAuth ? (
-                            <button
-                                disabled={signInPopup ? true : false}
-                                className="primary-button"
-                                onClick={handleLogOut}
-                            >
-                                Log out
-                            </button>
-                        ) : (
-                            <button
-                                disabled={handleLoginButtonState()}
-                                className="primary-button"
-                                onClick={handleSignIn}
-                            >
-                                Sign in
-                            </button>
-                        )}
-                    </div>
-                </div>
-            </div>
-        </nav>
-    );
+          </div>
+          <div className="nav__right">
+            <button className="nav__link">Language</button>
+            {isAuth ? (
+              <button
+                disabled={signInPopup ? true : false}
+                className="primary-button"
+                onClick={handleLogOut}
+              >
+                Log out
+              </button>
+            ) : (
+              <button
+                disabled={handleLoginButtonState()}
+                className="primary-button"
+                onClick={handleSignIn}
+              >
+                Sign in
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
 };
 
 export default LoginNav;

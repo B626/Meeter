@@ -32,6 +32,12 @@ body {
   font-size: 72px;
 }
 
+.black-h1 {
+  color: #000;
+  font-weight: 700;
+  font-size: 72px;
+}
+
 .primary-button {
   font-size: 18px;
   background-color: #b11795;
@@ -47,6 +53,23 @@ body {
 }
 .primary-button:disabled {
   background-color: #c8c8c8;
+}
+
+.create-profile {
+  height: auto;
+  text-align: center;
+  width: 100%;
+}
+.create-profile__title {
+  font-size: 48px;
+  margin: 0 0 20px 0;
+}
+.create-profile__signup-button {
+  margin: 0 0 10px 0;
+}
+.create-profile__error {
+  font-size: 20px;
+  font-weight: 500;
 }
 
 .nav {
@@ -76,6 +99,18 @@ body {
   color: #fff;
   font-size: 18px;
   cursor: pointer;
+}
+
+.login-nav {
+  position: static;
+}
+.login-nav__inner {
+  display: flex;
+  justify-content: space-between;
+}
+.login-nav__logo {
+  color: #000;
+  font-size: 40px;
 }
 
 .logo {
@@ -165,6 +200,7 @@ body {
 }
 
 .auth-form__row {
+  width: 100%;
   display: flex;
   flex-direction: column;
   text-align: left;
@@ -204,8 +240,18 @@ body {
 .auth-form-checkbox input {
   width: auto;
 }
+.auth-form-file input {
+  padding: 5px;
+  border: none;
+}
 .auth-form__error {
   text-align: left;
   font-size: 20px;
   margin: 0 0 10px 0;
+}
+
+.onboarding__row {
+  display: flex;
+  width: 100%;
+  gap: 10px;
 }

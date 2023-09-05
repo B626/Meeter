@@ -37,59 +37,62 @@ const SignUp = () => {
         }
     };
     return (
-        <div className="auth-popup">
-            <h1 className="auth-popup__title"> Sign up </h1>
-            <button className="auth-popup__close" onClick={handleCloseSignUpPopup}>
-                Close
-            </button>
-            <form className="auth-form" onSubmit={handleSubmit(submitFunc)}>
-                <InputText
-                    title={"Email"}
-                    name={"email"}
-                    type={"email"}
-                    placeholder={"Type your email"}
-                    register={register}
-                    error={errors.email}
-                    errorMsg={"This is not email"}
-                />
-                <InputText
-                    title={"Password"}
-                    name={"password"}
-                    type={"password"}
-                    placeholder={"Create your password"}
-                    register={register}
-                    error={errors.password}
-                    errorMsg={"Password must be at least 4 characters"}
-                />
-                <InputText
-                    title={"Confirm Password"}
-                    name={"password_check"}
-                    type={"password"}
-                    placeholder={"Confirm your password"}
-                    register={register}
-                    error={errors.password_check}
-                    errorMsg={"Password need to match"}
-                />
-                <InputRadio
-                    title={"Gender"}
-                    name={"gender_identity"}
-                    values={["Man", "Woman"]}
-                    register={register}
-                />
-                <InputCheckbox
-                    title={"Show my gender"}
-                    name={"show_gender"}
-                    register={register}
-                />
-                <button
-                    className="primary-button auth-popup__signup-button"
-                    type="submit"
-                >
-                    Create account
-                </button>
-                <p className="auth-popup__error">{message}</p>
-            </form>
-        </div>
+      <div className="auth-popup">
+        <h1 className="auth-popup__title"> Sign up </h1>
+        <button className="auth-popup__close" onClick={handleCloseSignUpPopup}>
+          Close
+        </button>
+        <form className="auth-form" onSubmit={handleSubmit(submitFunc)}>
+          <InputText
+            title={"Email"}
+            name={"email"}
+            type={"email"}
+            value={""}
+            placeholder={"Type your email"}
+            register={register}
+            error={errors.email}
+            errorMsg={"This is not email"}
+          />
+          <InputText
+            title={"Password"}
+            name={"password"}
+            type={"password"}
+            value={""}
+            placeholder={"Create your password"}
+            register={register}
+            error={errors.password}
+            errorMsg={"Password must be at least 4 characters"}
+          />
+          <InputText
+            title={"Confirm Password"}
+            name={"password_check"}
+            type={"password"}
+            value={""}
+            placeholder={"Confirm your password"}
+            register={register}
+            error={errors.password_check}
+            errorMsg={"Password need to match"}
+          />
+          <InputRadio
+            title={"Gender"}
+            name={"gender_identity"}
+            values={["Man", "Woman"]}
+            register={register}
+          />
+          <InputCheckbox
+            title={"Show my gender"}
+            name={"show_gender"}
+            register={register}
+          />
+          <button
+            className="primary-button auth-popup__signup-button"
+            type="submit"
+          >
+            Create account
+          </button>
+          <p className="auth-popup__error">{message}</p>
+        </form>
+      </div>
     );
 };
 

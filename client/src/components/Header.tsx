@@ -5,7 +5,6 @@ const Header = () => {
   return (
     <div>
       <Nav />
-      Header
     </div>
   );
 };
