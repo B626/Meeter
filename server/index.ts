@@ -38,7 +38,19 @@ app.get("/", (req: any, res: any) => {
 });
 
 app.post("/signup", async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const {
+    first_name,
+    last_name,
+    dob_day,
+    dob_month,
+    dob_year,
+    email,
+    password,
+    gender_identity,
+    gender_interest,
+    show_gender,
+    about
+  } = req.body;
   const generatedUserId = uuidv4();
   const hashedPassword = await bcrypt.hash(password, 10);
   try {
@@ -53,6 +65,15 @@ app.post("/signup", async (req: Request, res: Response) => {
       user_id: generatedUserId,
       email: sanitiziedEmail,
       hashed_password: hashedPassword,
+      first_name,
+      last_name,
+      dob_day,
+      dob_month,
+      dob_year, 
+      gender_identity,
+      gender_interest, 
+      show_gender, 
+      about
     };
     await users.insertOne(data);
     res.status(201).json({ userId: generatedUserId, email: sanitiziedEmail });
@@ -72,7 +93,6 @@ app.post("/login", async (req: Request, res: Response) => {
       const token = jwt.sign(user, secretOrPublicKey, {
         expiresIn: 60 * 24,
       });
-
       res.cookie("authToken", token, { maxAge: 900000, httpOnly: true });
       res.status(201).json({ token, user });
     }
@@ -80,6 +100,26 @@ app.post("/login", async (req: Request, res: Response) => {
   } catch (err) {
     console.log(err);
   }
+});
+
+app.post("/logout", async (req: Request, res: Response) => {
+  try {
+    res.clearCookie("authToken");
+    res.status(201).json("Logged out");
+    res.status(400).send("Invalid Credentials");
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.post("/updateuser", async (req: Request, res: Response) => {
+  // try {
+  //   res.clearCookie("authToken");
+  //   res.status(201).json("Logged out");
+  //   res.status(400).send("Invalid Credentials");
+  // } catch (err) {
+  //   console.log(err);
+  // }
 });
 
 app.get("/users", async (req: Request, res: Response) => {

@@ -1,13 +1,12 @@
-import React from "react";
-import { useValidation } from "../../hooks/useValidation";
-import { useFormController } from "../../hooks/useFormController";
-import { Controller, useController } from "react-hook-form";
+import React, { useEffect } from "react";
+import { useController } from "react-hook-form";
 
 interface InputTextProps {
   title: string
-  name: string,
+  name: string | any,
   type: string,
   control: any,
+  valueData: any,
   placeholder: string,
   register: Function,
   error: null | Object | undefined,
@@ -19,44 +18,47 @@ const InputText = ({
   name,
   type,
   control,
+  valueData,
   placeholder,
   register,
   error,
   errorMsg,
 }:InputTextProps) => {
-  console.log(error, errorMsg)
   const {
     field,
     fieldState: { invalid, isTouched, isDirty },
     formState: { touchedFields, dirtyFields }
   } = useController({
     name,
-    control,
-    rules: { required: true },
+    control
   });
 
-  const [value, setValue] = React.useState(String(field.value));
+  const [value, setValue] = React.useState(field.value);
+
+  useEffect(() => {
+    valueData !== null &&  setValue(valueData)
+  }, [])
 
   return (
     <>
       <label className="auth-form__row">
         {title}
           <input
-            name={name}
+            name={field.name}
             type={type}
-            id={name}
+            id={field.name}
             value={value}
             placeholder={placeholder}
             {...register(name)}
             onChange={(e) => {
-                field.onChange(parseInt(e.target.value, 10)); 
+                field.onChange(e.target.value, 10); 
                 setValue(e.target.value);
               }
             }
             onBlur={field.onBlur}
           />
       </label>
-      <p className="auth-form__error">{error && errorMsg}</p>
+      {/* <p className="auth-form__error">{error ? errorMsg : ''}</p> */}
     </>
   );
 };

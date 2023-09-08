@@ -1,16 +1,13 @@
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {useCookies} from "react-cookie";
 import {signInSchema} from "../schemas/SignInSchema";
+import { usePopUps } from "../hooks/usePopUps";
+import { useAuth } from "../hooks/useAuth";
+import { useValidation } from "../hooks/useValidation";
 import axios from "axios";
 import InputText from "./inputs/InputText";
-import {usePopUps} from "../hooks/usePopUps";
-import {useAuth} from "../hooks/useAuth";
-import {useValidation} from "../hooks/useValidation";
 
 const SignIn = () => {
-    const {errors, register, handleSubmit, getValues, control} = useValidation({schema: signInSchema})
-
     const [message, setMessage] = useState<string | null>(null);
 
     const navigate = useNavigate();
@@ -18,13 +15,17 @@ const SignIn = () => {
     const {handleSignInPopup} = usePopUps();
     const {handleIsAuth, handleUser} = useAuth();
 
+    const [userData] = useState()
+
+    const { errors, register, handleSubmit, getValues, control } =
+      useValidation({ userData: userData, schema: signInSchema });
+      
     const handleCloseSignInPopup = () => handleSignInPopup(false);
 
     const submitFunc = async () => {
         const {email, password} = getValues();
         setMessage(null);
         try {
-            // todo response should have the response.data.user property;
             const response = await axios.post("http://localhost:9000/login", {
                 email,
                 password,
@@ -34,7 +35,6 @@ const SignIn = () => {
             handleUser(response.data.user);
             handleIsAuth(true)
             handleCloseSignInPopup();
-
             navigate("/onboarding");
         } catch (err) {
             console.log(err);
@@ -53,6 +53,7 @@ const SignIn = () => {
             name={"email"}
             type={"email"}
             control={control}
+            valueData={userData}
             placeholder={"Type your email"}
             register={register}
             error={errors?.email}
@@ -64,6 +65,7 @@ const SignIn = () => {
             name={"password"}
             type={"password"}
             control={control}
+            valueData={userData}
             placeholder={"Type your password"}
             register={register}
             error={errors.password}

@@ -1,13 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useController } from "react-hook-form";
 
 interface InputRadioProps {
   title: string
   name: string,
+  control: any,
+  valueData: any,
   values: String[],
   register: Function
 }
 
-const InputRadio = ({ title, name, values, register }: InputRadioProps) => {
+const InputRadio = ({ 
+  title, 
+  name, 
+  control, 
+  valueData, 
+  values, 
+  register 
+}: InputRadioProps) => {
+  const {
+    field,
+    fieldState: { invalid, isTouched, isDirty },
+    formState: { touchedFields, dirtyFields }
+  } = useController({
+    name,
+    control
+  });
+
+  const [value, setValue] = React.useState(field.value);
+
+  useEffect(() => {
+    valueData !== null &&  setValue(valueData)
+  }, [])
+
   return (
     <label className="auth-form__row auth-form-gender-radio">
       {title}
@@ -18,10 +43,15 @@ const InputRadio = ({ title, name, values, register }: InputRadioProps) => {
               <label htmlFor={e.toLowerCase()}>{e}</label>
               <input
                 {...register(name)}
+                onChange={(element) => {
+                    field.onChange(element.target.id === "on" ? true : false)
+                    setValue(element.target.id)
+                  }
+                }
                 type="radio"
                 id={e.toLowerCase()}
-                name={name}
-                value={e.toLowerCase()}
+                name={field.name}
+                checked={field.value === e.toLowerCase()}
               />
             </div>
           );

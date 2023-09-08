@@ -5,32 +5,29 @@ import InputCheckbox from "../components/inputs/InputCheckbox";
 import { useValidation } from "../hooks/useValidation";
 import { onboardingSchema } from "../schemas/OnboardingSchema";
 import axios from "axios";
+import { useGetUser } from "../hooks/useGetUser";
+import { useAppSelector } from "../redux/hooks";
+import { getUser } from "../redux/slices";
 
 const OnboardingPage = () => {
-  const [userData, setUserData] = useState<Object | null>(null);
+  const [userData, setUserData] = useState<any>({});
 
   const [message, setMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    try {
-      axios
-        .get("http://localhost:9000/user", {
-          withCredentials: true,
-        })
-        .then((res) => {
-          setUserData(res.data);
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
-
   const { errors, register, handleSubmit, getValues, control } = useValidation({
-    userData: userData,
     schema: onboardingSchema,
   });
 
-  const submitFunc = async () => {};
+  // Endless loading
+  // const user = useGetUser()
+
+  const user = useAppSelector(getUser);
+
+  console.log(user.gender_identity)
+
+  const submitFunc = async () => {
+    console.log(getValues())
+  };
 
   return (
     <div className="onboarding">
@@ -43,6 +40,7 @@ const OnboardingPage = () => {
               name={"first_name"}
               type={"text"}
               control={control}
+              valueData={user.first_name}
               placeholder={"Type your name"}
               register={register}
               error={errors.email}
@@ -53,27 +51,19 @@ const OnboardingPage = () => {
               name={"email"}
               type={"email"}
               control={control}
+              valueData={user.email}
               placeholder={"Type your email"}
               register={register}
               error={errors.email}
               errorMsg={"This is not email"}
             />
-            <InputText
-              title={"Password"}
-              name={"password"}
-              type={"password"}
-              control={control}
-              placeholder={"Create your password"}
-              register={register}
-              error={errors.password}
-              errorMsg={"Password must be at least 4 characters"}
-            />
-            {/* <div className="onboarding__row">
+            <div className="onboarding__row">
               <InputText
                 title={"Day"}
                 name={"dob_day"}
                 type={"number"}
-                value={null}
+                control={control}
+                valueData={user.dob_day}
                 placeholder={"Day of birth"}
                 register={register}
                 error={errors.dob_day}
@@ -83,7 +73,8 @@ const OnboardingPage = () => {
                 title={"Month"}
                 name={"dob_month"}
                 type={"number"}
-                value={null}
+                control={control}
+                valueData={user.dob_month}
                 placeholder={"Month of birth"}
                 register={register}
                 error={errors.password_check}
@@ -93,19 +84,20 @@ const OnboardingPage = () => {
                 title={"Year"}
                 name={"dob_year"}
                 type={"number"}
-                value={null}
+                control={control}
+                valueData={user.dob_year}
                 placeholder={"Year of birth"}
                 register={register}
                 error={errors.password_check}
                 errorMsg={""}
               />
-            </div> */}
+            </div>
             <InputText
               title={"Bio"}
               name={"about"}
               type={"text"}
-
               control={control}
+              valueData={userData.about}
               placeholder={"Tell something about yourself"}
               register={register}
               error={errors.password}
@@ -114,12 +106,16 @@ const OnboardingPage = () => {
             <InputRadio
               title={"Gender"}
               name={"gender_identity"}
+              control={control}
+              valueData={user.gender_identity}
               values={["Man", "Woman"]}
               register={register}
             />
             <InputCheckbox
               title={"Show my gender"}
               name={"show_gender"}
+              control={control}
+              valueData={user.show_gender}
               register={register}
             />
             <label className="auth-form__row auth-form-file">

@@ -2,24 +2,21 @@ import React from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { usePopUps } from "../hooks/usePopUps";
 import { useAuth } from "../hooks/useAuth";
+import axios from "axios";
+import { signInSchema } from "../schemas/SignInSchema";
+import { useValidation } from "../hooks/useValidation";
 
 const LoginNav = () => {
   const { handleSignInPopup, handleSignUpPopup, signUpPopup, signInPopup } =
     usePopUps();
-  const { handleIsAuth, isAuth } = useAuth();
-
   const navigate = useNavigate();
   const { pathname } = useLocation();
-
-  const handleLogOut = () => {
-    handleIsAuth(false);
-    // todo add endpoint on the backend to clear cookie authToken
-    navigate("/");
-  };
+  const { handleIsAuth } = useAuth();
   const handleLoginButtonState = () =>
     !!((signUpPopup && pathname === "/") || signInPopup);
 
   const handleSignIn = () => {
+    handleIsAuth(true)
     handleSignInPopup(true);
     handleSignUpPopup(false);
     navigate("/");
@@ -77,23 +74,13 @@ const LoginNav = () => {
           </div>
           <div className="nav__right">
             <button className="nav__link">Language</button>
-            {isAuth ? (
-              <button
-                disabled={signInPopup ? true : false}
-                className="primary-button"
-                onClick={handleLogOut}
-              >
-                Log out
-              </button>
-            ) : (
-              <button
-                disabled={handleLoginButtonState()}
-                className="primary-button"
-                onClick={handleSignIn}
-              >
-                Sign in
-              </button>
-            )}
+            <button
+              disabled={handleLoginButtonState()}
+              className="primary-button"
+              onClick={handleSignIn}
+            >
+              Sign in
+            </button>
           </div>
         </div>
       </div>
