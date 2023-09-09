@@ -19,6 +19,7 @@ const SignUp = () => {
 
   const handleCloseSignUpPopup = () => handleSignUpPopup(false);
 
+
   const submitFunc = async () => {
     const {
       first_name,
@@ -71,7 +72,6 @@ const SignUp = () => {
           name={"email"}
           type={"email"}
           control={control}
-          valueData={""}
           placeholder={"Type your email"}
           register={register}
           error={errors}
@@ -82,7 +82,6 @@ const SignUp = () => {
           name={"password"}
           type={"password"}
           control={control}
-          valueData={""}
           placeholder={"Create your password"}
           register={register}
           error={errors.password}
@@ -93,7 +92,6 @@ const SignUp = () => {
           name={"password_check"}
           type={"password"}
           control={control}
-          valueData={""}
           placeholder={"Confirm your password"}
           register={register}
           error={errors.password_check}
@@ -103,7 +101,6 @@ const SignUp = () => {
           title={"Gender"}
           name={"gender_identity"}
           control={control}
-          valueData={"man"}
           values={["Man", "Woman"]}
           register={register}
         />
@@ -111,7 +108,6 @@ const SignUp = () => {
           title={"Show my gender"}
           name={"show_gender"}
           control={control}
-          valueData={true}
           register={register}
         />
         <button

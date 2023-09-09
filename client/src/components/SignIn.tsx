@@ -19,7 +19,7 @@ const SignIn = () => {
 
     const { errors, register, handleSubmit, getValues, control } =
       useValidation({ userData: userData, schema: signInSchema });
-      
+
     const handleCloseSignInPopup = () => handleSignInPopup(false);
 
     const submitFunc = async () => {
@@ -53,7 +53,6 @@ const SignIn = () => {
             name={"email"}
             type={"email"}
             control={control}
-            valueData={userData}
             placeholder={"Type your email"}
             register={register}
             error={errors?.email}
@@ -65,7 +64,6 @@ const SignIn = () => {
             name={"password"}
             type={"password"}
             control={control}
-            valueData={userData}
             placeholder={"Type your password"}
             register={register}
             error={errors.password}

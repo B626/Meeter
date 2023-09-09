@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from 'react';
 import { useController } from "react-hook-form";
 
 interface InputTextProps {
@@ -6,7 +6,6 @@ interface InputTextProps {
   name: string | any,
   type: string,
   control: any,
-  valueData: any,
   placeholder: string,
   register: Function,
   error: null | Object | undefined,
@@ -18,7 +17,6 @@ const InputText = ({
   name,
   type,
   control,
-  valueData,
   placeholder,
   register,
   error,
@@ -33,29 +31,15 @@ const InputText = ({
     control
   });
 
-  const [value, setValue] = React.useState(field.value);
-
-  useEffect(() => {
-    valueData !== null &&  setValue(valueData)
-  }, [])
-
   return (
     <>
       <label className="auth-form__row">
         {title}
           <input
-            name={field.name}
             type={type}
-            id={field.name}
-            value={value}
             placeholder={placeholder}
             {...register(name)}
-            onChange={(e) => {
-                field.onChange(e.target.value, 10); 
-                setValue(e.target.value);
-              }
-            }
-            onBlur={field.onBlur}
+            {...field}
           />
       </label>
       {/* <p className="auth-form__error">{error ? errorMsg : ''}</p> */}
