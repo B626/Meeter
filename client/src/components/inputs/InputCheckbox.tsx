@@ -1,20 +1,18 @@
-import React, { useEffect } from "react";
+import React from 'react';
 import { useController } from "react-hook-form";
 
 interface InputCheckboxProps {
   title: string
   name: string,
   control: any,
-  valueData: any,
   register: Function
 }
 
 const InputCheckbox = ({
-  title, 
-  name, 
-  control, 
-  valueData, 
-  register 
+  title,
+  name,
+  control,
+  register
 }: InputCheckboxProps) => {
     const {
     field,
@@ -25,26 +23,13 @@ const InputCheckbox = ({
     control
   });
 
-  const [value, setValue] = React.useState(field.value);
-
-  useEffect(() => {
-    valueData !== null && setValue(valueData)
-  }, [])
-
   return (
     <label className="auth-form__row auth-form-checkbox">
       {title}
-      <input type="checkbox" 
-      name={field.name} 
-      id={field.name} 
-      checked={value}
+      <input type="checkbox"
+      checked={field.value}
       {...register(name)}
-      onChange={(e) => {
-          setValue((prevState:boolean) => !prevState)
-          field.onChange(e.target.checked); 
-        }
-      }
-      onBlur={field.onBlur}
+       {...field}
       />
     </label>
   );

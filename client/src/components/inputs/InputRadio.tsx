@@ -40,15 +40,12 @@ const InputRadio = ({
                 {...register(name)}
                 onChange={(element) => {
                     field.onChange(element.target.id)
-                    console.log(field.value)
-                    console.log(e.toLowerCase())
-                    console.log(e.toLowerCase() === field.value)
                   }
                 }
                 type="radio"
                 id={e.toLowerCase()}
                 name={field.name}
-                checked={field.value && e.toLowerCase() === field.value ? true : false}
+                checked={field.value === e.toLowerCase()}
               />
             </div>
           );
