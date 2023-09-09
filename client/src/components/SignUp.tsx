@@ -10,6 +10,7 @@ import { useValidation } from "../hooks/useValidation";
 
 const SignUp = () => {
   const { errors, register, handleSubmit, getValues, control } = useValidation({
+    defaultValues: {email: 'nigga'},
     schema: signUpSchema,
   });
 
@@ -21,21 +22,12 @@ const SignUp = () => {
 
   const submitFunc = async () => {
     const {
-      first_name,
-      last_name,
-      dob_day,
-      dob_month,
-      dob_year,
       email,
       password,
       gender_identity,
-      gender_interest,
       show_gender,
       password_check,
     } = getValues();
-    console.log(
-      gender_identity
-    );
     if (password === password_check) {
       setMessage(null);
       try {
@@ -59,6 +51,7 @@ const SignUp = () => {
       setMessage("Passwords don't match!");
     }
   };
+
   return (
     <div className="auth-popup">
       <h1 className="auth-popup__title"> Sign up </h1>
