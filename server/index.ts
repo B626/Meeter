@@ -39,17 +39,10 @@ app.get("/", (req: any, res: any) => {
 
 app.post("/signup", async (req: Request, res: Response) => {
   const {
-    first_name,
-    last_name,
-    dob_day,
-    dob_month,
-    dob_year,
     email,
     password,
     gender_identity,
-    gender_interest,
     show_gender,
-    about
   } = req.body;
   const generatedUserId = uuidv4();
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -65,15 +58,15 @@ app.post("/signup", async (req: Request, res: Response) => {
       user_id: generatedUserId,
       email: sanitiziedEmail,
       hashed_password: hashedPassword,
-      first_name,
-      last_name,
-      dob_day,
-      dob_month,
-      dob_year, 
+      first_name: "",
+      last_name: "",
+      dob_day: "",
+      dob_month: "",
+      dob_year: "",
       gender_identity,
-      gender_interest, 
-      show_gender, 
-      about
+      gender_interest: "",
+      show_gender,
+      about: "",
     };
     await users.insertOne(data);
     res.status(201).json({ userId: generatedUserId, email: sanitiziedEmail });
@@ -96,8 +89,8 @@ app.post("/login", async (req: Request, res: Response) => {
       res.cookie("authToken", token, { maxAge: 900000, httpOnly: true });
       res.status(201).json({ token, user });
     }
-    res.status(400).send("Invalid Credentials");
   } catch (err) {
+    res.status(400).send("Invalid Credentials");
     console.log(err);
   }
 });
@@ -106,20 +99,45 @@ app.post("/logout", async (req: Request, res: Response) => {
   try {
     res.clearCookie("authToken");
     res.status(201).json("Logged out");
-    res.status(400).send("Invalid Credentials");
   } catch (err) {
+    res.status(400).send("Invalid Credentials");
     console.log(err);
   }
 });
 
-app.post("/updateuser", async (req: Request, res: Response) => {
-  // try {
-  //   res.clearCookie("authToken");
-  //   res.status(201).json("Logged out");
-  //   res.status(400).send("Invalid Credentials");
-  // } catch (err) {
-  //   console.log(err);
-  // }
+app.put("/updateuser", async (req: Request, res: Response) => {
+  try {
+    const {
+      first_name,
+      email,
+      dob_day,
+      dob_month,
+      dob_year,
+      about,
+      gender_identity,
+      show_gender,
+    } = req.body;
+    const { authToken } = req.cookies;
+    await jwt.verify(authToken, secretOrPublicKey);
+    const database = client.db("app-data");
+    const users = database.collection("users");
+    const updateDocument = {
+      $set: {
+        first_name,
+        email,
+        dob_day,
+        dob_month,
+        dob_year,
+        about,
+        gender_identity,
+        show_gender,
+      },
+    };
+    const insertedUser = await users.updateOne({email}, updateDocument)
+    res.send(insertedUser)
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 app.get("/users", async (req: Request, res: Response) => {

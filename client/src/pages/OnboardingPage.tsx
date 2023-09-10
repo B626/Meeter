@@ -6,20 +6,78 @@ import { useValidation } from "../hooks/useValidation";
 import { onboardingSchema } from "../schemas/OnboardingSchema";
 import { useAppSelector } from "../redux/hooks";
 import { getUser } from "../redux/slices";
+import { useAuth } from "../hooks/useAuth";
+import axios from "axios";
 
 const OnboardingPage = () => {
   const [message, setMessage] = useState<string | null>(null);
+  const user = useAppSelector(getUser);
+  const { handleUser } = useAuth();
 
   const { errors, register, handleSubmit, getValues, control } = useValidation({
     schema: onboardingSchema,
+    defaultValues: {
+      first_name: user ? user.first_name : "",
+      email: user ? user.email : "",
+      dob_day: user ? user.dob_day : "",
+      dob_month: user ? user.dob_month : "",
+      dob_year: user ? user.dob_year : "",
+      about: user ? user.about : "",
+      gender_identity: user ? user.gender_identity : "",
+      show_gender: user ? user.show_gender : "",
+    },
   });
 
-  const user = useAppSelector(getUser);
-
-  console.log(user.gender_identity)
-
   const submitFunc = async () => {
-    console.log(getValues())
+    const {
+      email,
+      first_name,
+      dob_day,
+      dob_month,
+      dob_year,
+      about,
+      gender_identity,
+      show_gender,
+    } = getValues();
+    setMessage(null);
+    try {
+      await axios.put(
+        "http://localhost:9000/updateuser",
+        {
+          first_name,
+          email,
+          dob_day,
+          dob_month,
+          dob_year,
+          about,
+          gender_identity,
+          show_gender,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      handleUser({
+        first_name,
+        email,
+        dob_day,
+        dob_month,
+        dob_year,
+        about,
+        gender_identity,
+        show_gender,
+      });
+      setMessage("Profile updated");
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    } catch (err) {
+      console.log(err);
+      setMessage("Something went wrong");
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    }
   };
 
   return (
@@ -35,8 +93,7 @@ const OnboardingPage = () => {
               control={control}
               placeholder={"Type your name"}
               register={register}
-              error={errors.email}
-              errorMsg={null}
+              error={errors.first_name}
             />
             <InputText
               title={"Email"}
@@ -46,7 +103,6 @@ const OnboardingPage = () => {
               placeholder={"Type your email"}
               register={register}
               error={errors.email}
-              errorMsg={"This is not email"}
             />
             <div className="onboarding__row">
               <InputText
@@ -57,7 +113,6 @@ const OnboardingPage = () => {
                 placeholder={"Day of birth"}
                 register={register}
                 error={errors.dob_day}
-                errorMsg={""}
               />
               <InputText
                 title={"Month"}
@@ -66,8 +121,7 @@ const OnboardingPage = () => {
                 control={control}
                 placeholder={"Month of birth"}
                 register={register}
-                error={errors.password_check}
-                errorMsg={""}
+                error={errors.dob_month}
               />
               <InputText
                 title={"Year"}
@@ -76,8 +130,7 @@ const OnboardingPage = () => {
                 control={control}
                 placeholder={"Year of birth"}
                 register={register}
-                error={errors.password_check}
-                errorMsg={""}
+                error={errors.dob_year}
               />
             </div>
             <InputText
@@ -87,8 +140,7 @@ const OnboardingPage = () => {
               control={control}
               placeholder={"Tell something about yourself"}
               register={register}
-              error={errors.password}
-              errorMsg={""}
+              error={errors.about}
             />
             <InputRadio
               title={"Gender"}
@@ -111,7 +163,7 @@ const OnboardingPage = () => {
               className="primary-button auth-popup__signup-button"
               type="submit"
             >
-              Create profile
+              Update profile
             </button>
             <p className="auth-popup__error">{message}</p>
           </form>

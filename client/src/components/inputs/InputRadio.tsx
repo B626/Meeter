@@ -1,22 +1,20 @@
-import React, { useEffect } from "react";
+import React from 'react';
 import { useController } from "react-hook-form";
 
 interface InputRadioProps {
   title: string
   name: string,
   control: any,
-  valueData: any,
   values: String[],
   register: Function
 }
 
-const InputRadio = ({ 
-  title, 
-  name, 
-  control, 
-  valueData, 
-  values, 
-  register 
+const InputRadio = ({
+  title,
+  name,
+  control,
+  values,
+  register
 }: InputRadioProps) => {
   const {
     field,
@@ -24,8 +22,7 @@ const InputRadio = ({
     formState: { touchedFields, dirtyFields }
   } = useController({
     name,
-    control,
-    defaultValue: valueData
+    control
   });
 
   return (
@@ -33,19 +30,18 @@ const InputRadio = ({
       {title}
       <div className="auth-form__radio-inputs">
         {values.map((e, i) => {
+          const valueLoweredCase = e.toLowerCase();
           return (
             <div key={i} className="auth-form__radio">
-              <label htmlFor={e.toLowerCase()}>{e}</label>
+              <label htmlFor={valueLoweredCase}>{e}</label>
               <input
                 {...register(name)}
-                onChange={(element) => {
-                    field.onChange(element.target.id)
-                  }
-                }
+                {...field}
+                onChange={() => field.onChange(valueLoweredCase)}
                 type="radio"
-                id={e.toLowerCase()}
-                name={field.name}
-                checked={field.value === e.toLowerCase()}
+                id={valueLoweredCase}
+                checked={field.value === valueLoweredCase}
+                value={valueLoweredCase}
               />
             </div>
           );

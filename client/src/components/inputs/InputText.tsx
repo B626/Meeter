@@ -8,8 +8,7 @@ interface InputTextProps {
   control: any,
   placeholder: string,
   register: Function,
-  error: null | Object | undefined,
-  errorMsg: null | string
+  error: any
 }
 
 const InputText = ({
@@ -19,8 +18,7 @@ const InputText = ({
   control,
   placeholder,
   register,
-  error,
-  errorMsg,
+  error
 }:InputTextProps) => {
   const {
     field,
@@ -42,7 +40,7 @@ const InputText = ({
             {...field}
           />
       </label>
-      {/* <p className="auth-form__error">{error ? errorMsg : ''}</p> */}
+      <p className="auth-form__error">{error ? error.message : ""}</p>
     </>
   );
 };

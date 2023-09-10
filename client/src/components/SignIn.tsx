@@ -8,7 +8,7 @@ import axios from "axios";
 import InputText from "./inputs/InputText";
 
 const SignIn = () => {
-  const [message, setMessage] = (useState < string) | (null > null);
+  const [message, setMessage] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
@@ -42,6 +42,9 @@ const SignIn = () => {
     } catch (err) {
       console.log(err);
       setMessage("Wrong password or email");
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     }
   };
   return (
@@ -58,8 +61,7 @@ const SignIn = () => {
           control={control}
           placeholder={"Type your email"}
           register={register}
-          error={errors?.email}
-          errorMsg={"This is not an email"}
+          error={errors.email}
         />
 
         <InputText
@@ -70,7 +72,6 @@ const SignIn = () => {
           placeholder={"Type your password"}
           register={register}
           error={errors.password}
-          errorMsg={"Password must be at least 4 characters"}
         />
         <button
           className="primary-button auth-popup__signup-button"

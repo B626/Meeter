@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useCookies } from "react-cookie";
 import { signUpSchema } from "../schemas/SignUpSchema";
 import axios from "axios";
 import InputText from "./inputs/InputText";
@@ -10,46 +9,80 @@ import { useValidation } from "../hooks/useValidation";
 
 const SignUp = () => {
   const { errors, register, handleSubmit, getValues, control } = useValidation({
-    defaultValues: {email: 'nigga'},
     schema: signUpSchema,
   });
 
   const { handleSignUpPopup } = usePopUps();
 
-  const [message, setMessage] = useState <string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
   const handleCloseSignUpPopup = () => handleSignUpPopup(false);
 
+  // const submitFunc = async () => {
+  //   const {
+  //     email,
+  //     password,
+  //     gender_identity,
+  //     show_gender,
+  //     password_check,
+  //   } = getValues();
+  //   if (password === password_check) {
+  //     setMessage(null);
+  //     try {
+  //       await axios.post(
+  //         "http://localhost:9000/signup",
+  //         {
+  //           email,
+  //           password,
+  //           gender_identity,
+  //           show_gender,
+  //         },
+  //         {
+  //           withCredentials: true,
+  //         }
+  //       );
+  //       setMessage("Account created! You can log in now");
+  //       setTimeout(() => {
+  //         handleSignUpPopup(false)
+  //         setMessage(null)
+  //       }, 5000)
+  //     } catch (err) {
+  //       setMessage("Something wen't wrong")
+  //       console.log(err);
+  //     }
+  //   } else {
+  //     setMessage("Passwords don't match!");
+  //   }
+  // };
 
   const submitFunc = async () => {
-    const {
-      email,
-      password,
-      gender_identity,
-      show_gender,
-      password_check,
-    } = getValues();
-    if (password === password_check) {
-      setMessage(null);
-      try {
-        await axios.post(
-          "http://localhost:9000/signup",
-          {
-            email,
-            password,
-            gender_identity,
-            show_gender
-          },
-          {
-            withCredentials: true,
-          }
-        );
-        setMessage("Account created! You can log in now");
-      } catch (err) {
-        console.log(err);
-      }
-    } else {
-      setMessage("Passwords don't match!");
+    const { email, password, gender_identity, show_gender, password_check } =
+      getValues();
+    setMessage(null);
+    try {
+      await axios.post(
+        "http://localhost:9000/signup",
+        {
+          email,
+          password,
+          gender_identity,
+          show_gender,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      setMessage("Account created! You can log in now");
+      setTimeout(() => {
+        handleSignUpPopup(false);
+        setMessage(null);
+      }, 5000);
+    } catch (err) {
+      console.log(err);
+      setMessage("Something wen't wrong");
+      setTimeout(() => {
+        setMessage(null)
+      })
     }
   };
 
@@ -67,8 +100,7 @@ const SignUp = () => {
           control={control}
           placeholder={"Type your email"}
           register={register}
-          error={errors}
-          errorMsg={"This is not email"}
+          error={errors.email}
         />
         <InputText
           title={"Password"}
@@ -78,7 +110,6 @@ const SignUp = () => {
           placeholder={"Create your password"}
           register={register}
           error={errors.password}
-          errorMsg={"Password must be at least 4 characters"}
         />
         <InputText
           title={"Confirm Password"}
@@ -88,7 +119,6 @@ const SignUp = () => {
           placeholder={"Confirm your password"}
           register={register}
           error={errors.password_check}
-          errorMsg={"Password need to match"}
         />
         <InputRadio
           title={"Gender"}
