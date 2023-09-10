@@ -1,14 +1,18 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import {useAuth} from "../hooks/useAuth";
 import {Navigate, Outlet} from "react-router-dom";
-import {useGetUser} from "../hooks/useGetUser";
+import {useAppDispatch} from "../redux/hooks";
+import {loadUser} from "../redux/slices";
 
 const ProtectedRoutes = () => {
     const {isAuth, isLoaded} = useAuth();
+    const dispatch = useAppDispatch();
 
-    useGetUser();
+    useEffect(() => {
+        dispatch(loadUser());
+    }, [dispatch]);
 
     // todo create loader for this case
     if (!isLoaded) {

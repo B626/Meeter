@@ -79,10 +79,10 @@ const SignUp = () => {
       }, 5000);
     } catch (err) {
       console.log(err);
-      setMessage("Something wen't wrong");
-      setTimeout(() => {
-        setMessage(null)
-      })
+      setMessage("Something went wrong");
+    }
+    finally {
+      setMessage(null)
     }
   };
 

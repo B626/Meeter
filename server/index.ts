@@ -83,7 +83,7 @@ app.post("/login", async (req: Request, res: Response) => {
     const { hashed_password, ...user } = await users.findOne({ email });
     const correctPassword = await bcrypt.compare(password, hashed_password);
     if (user && correctPassword) {
-      const token = jwt.sign(user, secretOrPublicKey, {
+      const token = jwt.sign({email}, secretOrPublicKey, {
         expiresIn: 60 * 24,
       });
       res.cookie("authToken", token, { maxAge: 900000, httpOnly: true });
@@ -118,7 +118,7 @@ app.put("/updateuser", async (req: Request, res: Response) => {
       show_gender,
     } = req.body;
     const { authToken } = req.cookies;
-    await jwt.verify(authToken, secretOrPublicKey);
+   const data = await jwt.verify(authToken, secretOrPublicKey);
     const database = client.db("app-data");
     const users = database.collection("users");
     const updateDocument = {
@@ -133,8 +133,8 @@ app.put("/updateuser", async (req: Request, res: Response) => {
         show_gender,
       },
     };
-    const insertedUser = await users.updateOne({email}, updateDocument)
-    res.send(insertedUser)
+    const insertedUser = await users.updateOne({email:data.email}, updateDocument);
+    res.status(200).json(insertedUser);
   } catch (err) {
     console.log(err);
   }
