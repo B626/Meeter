@@ -166,7 +166,7 @@ app.put("/addmatch", async (req: Request, res: Response) => {
       $push: {matches: {email: matched_email}}
     };
     const user = await users.updateOne(query, updateDocument)
-    res.send(user)
+    res.status(200).json(user);
 
   } catch (err) {
     console.log(err);

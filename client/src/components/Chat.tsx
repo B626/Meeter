@@ -4,6 +4,7 @@ import { getUser } from "../redux/slices";
 
 const Chat = () => {
   const user = useAppSelector(getUser);
+  const img = user.pic_url || "https://www.medqualityassurance.org/views/images/default_user.png"
   return (
     <section className="chat">
       <div className="chat__top">
@@ -11,11 +12,7 @@ const Chat = () => {
         <div className="chat__pic-wrapper">
           <img
             className="chat__pic"
-            src={
-              user.pic_url
-                ? user.pic_url
-                : "https://www.medqualityassurance.org/views/images/default_user.png"
-            }
+            src={img}
             alt=""
           />
         </div>

@@ -9,12 +9,12 @@ export const useValidation = ({defaultValues, schema}: { defaultValues?: any, sc
         control,
         watch,
         formState: {errors},
-        reset
+        reset,
     } = useForm({
         defaultValues: defaultValues,
         resolver: yupResolver(schema),
     });
-    
+
     return {
         errors,
         register,
