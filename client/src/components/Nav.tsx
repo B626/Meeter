@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
 import { useValidation } from "../hooks/useValidation";
@@ -25,7 +25,7 @@ const Nav = () => {
         }
       );
       handleIsAuth(false);
-      handleUser({})
+      handleUser({});
       navigate("/");
     } catch (err) {
       console.log(err);
@@ -35,7 +35,33 @@ const Nav = () => {
     <div className="nav login-nav">
       <div className="container">
         <div className="login-nav__inner">
-          <h1 className="login-nav__logo">Nav</h1>
+          <div className="login-nav__left">
+            <NavLink className="login-nav__logo" to="/main">
+              Nav
+            </NavLink>
+            <ul className="menu">
+              <li className="menu__item">
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "menu__link menu__link--active" : "menu__link"
+                  }
+                  to="/onboarding"
+                >
+                  Onboarding
+                </NavLink>
+              </li>
+              <li className="menu__item">
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "menu__link menu__link--active" : "menu__link"
+                  }
+                  to="/dashboard"
+                >
+                  Dashboard
+                </NavLink>
+              </li>
+            </ul>
+          </div>
           <button className="primary-button" onClick={handleLogOut}>
             Log out
           </button>

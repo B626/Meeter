@@ -15,7 +15,7 @@ const SignIn = () => {
   const { handleSignInPopup } = usePopUps();
   const { handleIsAuth, handleUser } = useAuth();
 
-  const { errors, register, handleSubmit, getValues, control } = useValidation({
+  const { errors, register, handleSubmit, getValues, control, reset } = useValidation({
     schema: signInSchema,
   });
 
@@ -35,6 +35,11 @@ const SignIn = () => {
           withCredentials: true,
         }
       );
+      reset({
+        email: "",
+        password: ""
+      })
+      console.log(response.data.user)
       handleUser(response.data.user);
       handleIsAuth(true);
       handleCloseSignInPopup();

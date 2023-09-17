@@ -15,7 +15,7 @@ const LoginPage = () => {
 
     return (
         <>
-            <div className="login">
+            <section className="login">
                 <LoginNav/>
                 <div className="login__body">
                     <h1 className="login__title primary-h1">Find your match</h1>
@@ -38,7 +38,7 @@ const LoginPage = () => {
                     {signUpPopup && <SignUp/>}
                     {signInPopup && <SignIn/>}
                 </div>
-            </div>
+            </section>
             <Footer/>
         </>
     );

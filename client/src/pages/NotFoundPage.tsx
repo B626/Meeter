@@ -1,17 +1,21 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 const NotFoundPage = () => {
+  const { isAuth } = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
     setTimeout(() => {
-      navigate("/");
+      isAuth ? navigate("/main") : navigate("/");
     }, 5000);
   }, [navigate]);
   return (
-    <div className="container">
-      <h1 className="primary-h1">Not Found Page</h1>
-    </div>
+    <section className="notfound">
+      <div className="container">
+        <h1 className="black-h1">Not Found Page</h1>
+      </div>
+    </section>
   );
 };
 

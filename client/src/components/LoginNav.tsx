@@ -29,48 +29,6 @@ const LoginNav = () => {
             <NavLink className="logo" to={"/"}>
               <p className="logo__text">Meeter</p>
             </NavLink>
-            {/* <ul className="menu">
-              <li className="menu__item">
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive ? "menu__link menu__link--active" : "menu__link"
-                  }
-                  to="/products"
-                >
-                  Products
-                </NavLink>
-              </li>
-              <li className="menu__item">
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive ? "menu__link menu__link--active" : "menu__link"
-                  }
-                  to="/learnmore"
-                >
-                  Learn more
-                </NavLink>
-              </li>
-              <li className="menu__item">
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive ? "menu__link menu__link--active" : "menu__link"
-                  }
-                  to="/safety"
-                >
-                  Safety
-                </NavLink>
-              </li>
-              <li className="menu__item">
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive ? "menu__link menu__link--active" : "menu__link"
-                  }
-                  to="/support"
-                >
-                  Support
-                </NavLink>
-              </li>
-            </ul> */}
           </div>
           <div className="nav__right">
             <button className="nav__link">Language</button>

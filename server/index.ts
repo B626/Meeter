@@ -42,7 +42,7 @@ app.post("/signup", async (req: Request, res: Response) => {
     email,
     password,
     gender_identity,
-    show_gender,
+    gender_interest,
   } = req.body;
   const generatedUserId = uuidv4();
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -63,10 +63,13 @@ app.post("/signup", async (req: Request, res: Response) => {
       dob_day: "",
       dob_month: "",
       dob_year: "",
+      age: null,
       gender_identity,
-      gender_interest: "",
-      show_gender,
+      gender_interest,
       about: "",
+      pic_url:
+        "https://www.medqualityassurance.org/views/images/default_user.png",
+      matches: []
     };
     await users.insertOne(data);
     res.status(201).json({ userId: generatedUserId, email: sanitiziedEmail });
@@ -109,32 +112,62 @@ app.put("/updateuser", async (req: Request, res: Response) => {
   try {
     const {
       first_name,
+      last_name,
       email,
       dob_day,
       dob_month,
       dob_year,
+      age,
       about,
       gender_identity,
-      show_gender,
+      gender_interest,
+      pic_url,
+      matches
     } = req.body;
     const { authToken } = req.cookies;
-   const data = await jwt.verify(authToken, secretOrPublicKey);
+    const data = await jwt.verify(authToken, secretOrPublicKey);
     const database = client.db("app-data");
     const users = database.collection("users");
     const updateDocument = {
       $set: {
         first_name,
+        last_name,
         email,
         dob_day,
         dob_month,
         dob_year,
+        age,
         about,
         gender_identity,
-        show_gender,
+        gender_interest,
+        pic_url,
+        matches
       },
     };
     const insertedUser = await users.updateOne({email:data.email}, updateDocument);
     res.status(200).json(insertedUser);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.put("/addmatch", async (req: Request, res: Response) => {
+  try {
+    const {
+      email,
+      matched_email
+    } = req.body;
+    const { authToken } = req.cookies;
+    const data = await jwt.verify(authToken, secretOrPublicKey);
+    const database = client.db("app-data");
+    const users = database.collection("users");
+    const query = {email}
+    const updateDocument = {
+      $push: {matches: {email: matched_email}}
+    };
+    const user = await users.updateOne(query, updateDocument)
+    res.send(user)
+
   } catch (err) {
     console.log(err);
   }
@@ -145,6 +178,28 @@ app.get("/users", async (req: Request, res: Response) => {
     const database = client.db("app-data");
     const users = database.collection("users");
     const returnedUsers = await users.find().toArray();
+    res.send(returnedUsers);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.get("/filteredusers", async (req: Request, res: Response) => {
+  try {
+    const gender_interest = req.query.gender_interest;
+    const age = Number(req.query.age);
+    const database = client.db("app-data");
+    const users = database.collection("users");
+    const query =
+      gender_interest === "both"
+        ? {
+            age: { $gte: age - 10, $lte: age + 10 },
+          }
+        : {
+            gender_identity: gender_interest,
+            age: { $gte: age - 10, $lte: age + 10 },
+          };
+    const returnedUsers = await users.find(query).toArray();
     res.send(returnedUsers);
   } catch (err) {
     console.log(err);

@@ -3,12 +3,11 @@ import { signUpSchema } from "../schemas/SignUpSchema";
 import axios from "axios";
 import InputText from "./inputs/InputText";
 import InputRadio from "./inputs/InputRadio";
-import InputCheckbox from "./inputs/InputCheckbox";
 import { usePopUps } from "../hooks/usePopUps";
 import { useValidation } from "../hooks/useValidation";
 
 const SignUp = () => {
-  const { errors, register, handleSubmit, getValues, control } = useValidation({
+  const { errors, register, handleSubmit, getValues, control, reset } = useValidation({
     schema: signUpSchema,
   });
 
@@ -18,45 +17,8 @@ const SignUp = () => {
 
   const handleCloseSignUpPopup = () => handleSignUpPopup(false);
 
-  // const submitFunc = async () => {
-  //   const {
-  //     email,
-  //     password,
-  //     gender_identity,
-  //     show_gender,
-  //     password_check,
-  //   } = getValues();
-  //   if (password === password_check) {
-  //     setMessage(null);
-  //     try {
-  //       await axios.post(
-  //         "http://localhost:9000/signup",
-  //         {
-  //           email,
-  //           password,
-  //           gender_identity,
-  //           show_gender,
-  //         },
-  //         {
-  //           withCredentials: true,
-  //         }
-  //       );
-  //       setMessage("Account created! You can log in now");
-  //       setTimeout(() => {
-  //         handleSignUpPopup(false)
-  //         setMessage(null)
-  //       }, 5000)
-  //     } catch (err) {
-  //       setMessage("Something wen't wrong")
-  //       console.log(err);
-  //     }
-  //   } else {
-  //     setMessage("Passwords don't match!");
-  //   }
-  // };
-
   const submitFunc = async () => {
-    const { email, password, gender_identity, show_gender, password_check } =
+    const { email, password, gender_identity, gender_interest } =
       getValues();
     setMessage(null);
     try {
@@ -66,12 +28,19 @@ const SignUp = () => {
           email,
           password,
           gender_identity,
-          show_gender,
+          gender_interest,
         },
         {
           withCredentials: true,
         }
       );
+      reset({
+        email: "",
+        password: "",
+        password_check: "",
+        gender_identity: "",
+        gender_interest: ""
+      })
       setMessage("Account created! You can log in now");
       setTimeout(() => {
         handleSignUpPopup(false);
@@ -80,9 +49,6 @@ const SignUp = () => {
     } catch (err) {
       console.log(err);
       setMessage("Something went wrong");
-    }
-    finally {
-      setMessage(null)
     }
   };
 
@@ -127,10 +93,11 @@ const SignUp = () => {
           values={["Man", "Woman"]}
           register={register}
         />
-        <InputCheckbox
-          title={"Show my gender"}
-          name={"show_gender"}
+        <InputRadio
+          title={"Gender interest"}
+          name={"gender_interest"}
           control={control}
+          values={["Man", "Woman", "Both"]}
           register={register}
         />
         <button

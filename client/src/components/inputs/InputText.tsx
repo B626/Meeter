@@ -30,7 +30,7 @@ const InputText = ({
   });
 
   return (
-    <>
+    <div>
       <label className="auth-form__row">
         {title}
           <input
@@ -40,8 +40,10 @@ const InputText = ({
             {...field}
           />
       </label>
-      <p className="auth-form__error">{error ? error.message : ""}</p>
-    </>
+      <div>
+        <p className="auth-form__error">{error ? error.message : ""}</p>
+      </div>
+    </div>
   );
 };
 

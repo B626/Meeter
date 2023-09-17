@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import InputText from "../components/inputs/InputText";
 import InputRadio from "../components/inputs/InputRadio";
-import InputCheckbox from "../components/inputs/InputCheckbox";
 import { useValidation } from "../hooks/useValidation";
 import { onboardingSchema } from "../schemas/OnboardingSchema";
 import { useAppSelector } from "../redux/hooks";
@@ -11,47 +10,68 @@ import axios from "axios";
 
 const OnboardingPage = () => {
   const [message, setMessage] = useState<string | null>(null);
-  const user = useAppSelector(getUser);
   const { handleUser } = useAuth();
+  const user = useAppSelector(getUser);
 
   const { errors, register, handleSubmit, getValues, control } = useValidation({
     schema: onboardingSchema,
     defaultValues: {
       first_name: user ? user.first_name : "",
+      last_name: user ? user.last_name : "",
       email: user ? user.email : "",
-      dob_day: user ? user.dob_day : "",
-      dob_month: user ? user.dob_month : "",
-      dob_year: user ? user.dob_year : "",
+      dob_day: user ? user.dob_day : null,
+      dob_month: user ? user.dob_month : null,
+      dob_year: user ? user.dob_year : null,
+      age: user ? user.age : null,
       about: user ? user.about : "",
       gender_identity: user ? user.gender_identity : "",
-      show_gender: user ? user.show_gender : "",
+      gender_interest: user ? user.gender_interest : "",
+      pic_url: user ? user.pic_url : "",
     },
   });
+
+  const calculateAge = (dob_day:number, dob_month:number, dob_year: number) => {
+   let now = new Date()
+   let today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+   let dob = new Date(dob_year, dob_month, dob_day)
+   let age = today.getFullYear() - dob_year
+   if (today < dob) {
+      age = age-1
+   }
+   return age
+  };
 
   const submitFunc = async () => {
     const {
       email,
       first_name,
+      last_name,
       dob_day,
       dob_month,
       dob_year,
       about,
       gender_identity,
-      show_gender,
+      gender_interest,
+      pic_url
     } = getValues();
     setMessage(null);
     try {
+      const actualAge = calculateAge(dob_day, dob_month, dob_year)
       await axios.put(
         "http://localhost:9000/updateuser",
         {
           first_name,
+          last_name,
           email,
           dob_day,
           dob_month,
           dob_year,
+          age: actualAge,
           about,
           gender_identity,
-          show_gender,
+          gender_interest,
+          pic_url,
+          matches: user.matches
         },
         {
           withCredentials: true,
@@ -59,41 +79,53 @@ const OnboardingPage = () => {
       );
       handleUser({
         first_name,
+        last_name,
         email,
         dob_day,
         dob_month,
         dob_year,
+        age: actualAge,
         about,
         gender_identity,
-        show_gender,
+        gender_interest,
+        matches: user.matches
       });
       setMessage("Profile updated");
       setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+        setMessage(null);
+      }, 5000);
     } catch (err) {
       console.log(err);
       setMessage("Something went wrong");
       setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+        setMessage(null);
+      }, 5000);
     }
   };
 
   return (
-    <div className="onboarding">
+    <section className="onboarding">
       <div className="container">
-        <div className="create-profile">
-          <h1 className="onboardюng__title">Create profile</h1>
+        <div className="onboarding__inner">
+          <h1 className="onboarding__title">Create profile</h1>
           <form className="auth-form" onSubmit={handleSubmit(submitFunc)}>
             <InputText
-              title={"Your name"}
+              title={"Your first name"}
               name={"first_name"}
               type={"text"}
               control={control}
               placeholder={"Type your name"}
               register={register}
               error={errors.first_name}
+            />
+            <InputText
+              title={"Your second name"}
+              name={"last_name"}
+              type={"text"}
+              control={control}
+              placeholder={"Type your second name"}
+              register={register}
+              error={errors.last_name}
             />
             <InputText
               title={"Email"}
@@ -142,6 +174,22 @@ const OnboardingPage = () => {
               register={register}
               error={errors.about}
             />
+            <InputText
+              title={"Picture"}
+              name={"pic_url"}
+              type={"text"}
+              control={control}
+              placeholder={"Your picture url"}
+              register={register}
+              error={errors.pic_url}
+            />
+            <div className="onboarding__profile-pic-wrapper">
+              <img
+                className="onboarding__profile-pic"
+                src={user.pic_url}
+                alt=""
+              />
+            </div>
             <InputRadio
               title={"Gender"}
               name={"gender_identity"}
@@ -149,16 +197,13 @@ const OnboardingPage = () => {
               values={["Man", "Woman"]}
               register={register}
             />
-            <InputCheckbox
-              title={"Show my gender"}
-              name={"show_gender"}
+            <InputRadio
+              title={"Gender interest"}
+              name={"gender_interest"}
               control={control}
+              values={["Man", "Woman", "Both"]}
               register={register}
             />
-            <label className="auth-form__row auth-form-file">
-              Avatar
-              <input type="file" name="pic_url" id="pic_url" />
-            </label>
             <button
               className="primary-button auth-popup__signup-button"
               type="submit"
@@ -169,7 +214,7 @@ const OnboardingPage = () => {
           </form>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

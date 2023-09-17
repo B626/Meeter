@@ -8,5 +8,6 @@ export const signUpSchema = yup.object().shape({
     .oneOf([yup.ref("password")])
     .required(),
   gender_identity: yup.string(),
+  gender_interest: yup.string(),
   show_gender: yup.boolean(),
 });
