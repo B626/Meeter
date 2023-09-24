@@ -2,9 +2,6 @@ import React from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { usePopUps } from "../hooks/usePopUps";
 import { useAuth } from "../hooks/useAuth";
-import axios from "axios";
-import { signInSchema } from "../schemas/SignInSchema";
-import { useValidation } from "../hooks/useValidation";
 
 const LoginNav = () => {
   const { handleSignInPopup, handleSignUpPopup, signUpPopup, signInPopup } =
