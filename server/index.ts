@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import e, { NextFunction, Request, Response } from "express";
 
 const { MongoClient } = require("mongodb");
 const { v4: uuidv4 } = require("uuid");
@@ -188,6 +188,7 @@ app.get("/filteredusers", async (req: Request, res: Response) => {
   try {
     const gender_interest = req.query.gender_interest;
     const age = Number(req.query.age);
+    const email = req.query.email;
     const database = client.db("app-data");
     const users = database.collection("users");
     const query =
@@ -200,7 +201,26 @@ app.get("/filteredusers", async (req: Request, res: Response) => {
             age: { $gte: age - 10, $lte: age + 10 },
           };
     const returnedUsers = await users.find(query).toArray();
-    res.send(returnedUsers);
+    const filteredUsers = returnedUsers.filter((e: any) => e.email !== email);
+    res.send(filteredUsers);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.get("/matchedusers", async (req: Request, res: Response) => {
+  try {
+    const { authToken } = req.cookies;
+    if (!authToken) res.status(401).send("Not Authorized");
+    const { email } = await jwt.verify(authToken, secretOrPublicKey);
+    const database = client.db("app-data");
+    const users = database.collection("users");
+    const { matches } = await users.findOne({ email });
+    const matchedUsers:Object[] = await Promise.all(matches.map(async (e: any) => {
+      const user = await users.findOne({ email: e.email });
+      return user
+    }))
+    res.send(matchedUsers)
   } catch (err) {
     console.log(err);
   }
@@ -208,6 +228,7 @@ app.get("/filteredusers", async (req: Request, res: Response) => {
 
 app.get("/user", async (req: Request, res: Response) => {
   try {
+    console.log(req.query)
     const { authToken } = req.cookies;
     if (!authToken) res.status(401).send("Not Authorized");
     const { email } = await jwt.verify(authToken, secretOrPublicKey);
@@ -215,6 +236,47 @@ app.get("/user", async (req: Request, res: Response) => {
     const users = database.collection("users");
     const { hashed_password, ...rest } = await users.findOne({ email });
     res.status(200).json(rest);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.get("/messages", async (req: Request, res: Response) => {
+  try {
+    const receiverEmail = req.query.email
+    const { authToken } = req.cookies;
+    const { email } = await jwt.verify(authToken, secretOrPublicKey);
+    const query = {
+      $or: [
+        { from: email, to: receiverEmail },
+        { from: receiverEmail, to: email },
+      ],
+    }; 
+    // const query = { from: email, to: receiverEmail }
+    const database = client.db("app-data");
+    const messagesCollection = database.collection("messages");
+    const messages = await messagesCollection.find(query).toArray();
+    console.log(messages)
+    res.send(messages)
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.post("/sendmessage", async (req: Request, res: Response) => {
+  try {
+    const { message, to } = req.body;
+    const { authToken } = req.cookies;
+    const { email } = await jwt.verify(authToken, secretOrPublicKey);
+    const database = client.db("app-data");
+    const messagesCollection = database.collection("messages");
+    const data = {
+      timestamp: Date.now(),
+      from: email,
+      to,
+      message
+    }
+    await messagesCollection.insertOne(data)
   } catch (err) {
     console.log(err);
   }

@@ -6,6 +6,8 @@ import { Route, Routes } from "react-router-dom";
 import NotFoundPage from "./pages/NotFoundPage";
 import OnboardingPage from "./pages/OnboardingPage";
 import MainPage from "./pages/MainPage";
+import UserDisplayPage from "./pages/UserDisplay";
+import ChatPage from "./pages/ChatPage";
 
 const App = () => {
   return (
@@ -15,6 +17,8 @@ const App = () => {
         <Route path="/main" element={<MainPage />} />
         <Route path="/onboarding" element={<OnboardingPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/user" element={<UserDisplayPage />} />
+        <Route path="/chat" element={<ChatPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />

@@ -19,6 +19,7 @@
 
 body{
   font-family: 'Roboto', sans-serif;
+  transition: .3s all ease;
 }
 
 .app{
@@ -369,17 +370,34 @@ body{
   }
 }
 
-.chat{
-  width: 400px;
+
+.chat-contact{
+  cursor: pointer;
+    height: 100px;
+    border-bottom: 1px solid #000;
+    &__name{
+      font-size: 30px;
+      padding: 10px;
+    }
+    &:hover{
+      background-color: #f0f0f0;
+    }
+}
+
+.mini-chat{
+  width: 550px;
   background-color: rgb(226, 226, 226);
   &__top{
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 30px;
+    height: 15%;
   }
   &__body{
-
+    padding: 10px 30px;
+    height: 85%;
+    position: relative;
   }
   &__pic-wrapper{
     max-width: 80px;
@@ -392,5 +410,205 @@ body{
   }
   &__username{
     font-size: 30px;
+  }
+  &__navigation{
+    margin: 0 0 20px 0;
+    display: flex;
+    gap: 20px;
+  }
+  &__nav-link{
+    font-size: 20px;
+    cursor: pointer;
+    &--active{
+      font-size: 20px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+  &__messages{
+    height:290px;
+    overflow-x:hidden;
+    overflow-y:auto;
+    padding: 20px 10px;
+  }
+  &__message{
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    &:not(:last-child){
+      margin: 0 0 20px 0;
+    }
+  }
+
+  &__message-area{
+    display: flex;
+    justify-content: right;
+    flex-direction: row-reverse;
+    text-align: right;
+    width: 100%;
+    gap: 15px;
+  }
+
+  &__message-date{
+    width: 100%;
+    text-align: right;
+  }
+
+  &__message-date-friend{
+
+  }
+
+  &__message-area-friend{
+    display: flex;
+    width: 100%;
+    gap: 15px;
+  }
+
+  &__message-text{
+    font-size: 30px;
+  }
+  &__input-area{
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    bottom: 10px;
+    right: 10px;
+    left: 10px;
+    & textarea {
+      resize: none;
+      height: 100px;
+      width: 60%;
+    }
+    & button{
+    }
+  }
+  &__message-receiver-name{
+    font-size: 40px;
+    text-align: center;
+    margin: 0 0 10px 0;
+  }
+  &__user-pic{
+    width: 50px;
+    height: 50px;
+    border-radius: 100px;
+  }
+}
+
+.chat{
+  height: 100%;
+  &__inner{
+    display: flex;
+  }
+  &__matches-bar{
+    width: 30%;
+    border-right: 1px solid #000;
+  }
+  &__messages-bar{
+    width: 70%;
+  }
+  &__messages{
+    width: 100%;
+    height: 330px;
+        overflow-x:hidden;
+    overflow-y:auto;
+    padding: 20px;
+  }
+}
+
+
+.matches{
+  overflow-x:hidden;
+  overflow-y:auto;
+  max-height: 500px;
+}
+
+.match{
+  display: flex;
+  gap: 20px;
+  &__pic{
+    width: 80px;
+    height: 80px;
+    border-radius: 100px;
+  }
+  &__name{
+    font-size: 30px;
+    text-decoration: none;
+    color: #000;
+    display: block;
+  }
+  &:not(:last-child){
+    margin: 0 0 20px 0;
+  }
+}
+
+.messages-area{
+  height: 100%;
+  padding: 0 20px;
+  position: relative;
+  &__input-area{
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 20px;
+  }
+  &__contact-info{
+
+  }
+  &__contact-name{
+    font-size: 50px;
+  }
+  &__textarea{
+    width: 100%;
+    height: 100px;
+    font-size: 20px;
+    padding: 15px;
+    resize: none;
+  }
+  &__button{
+    white-space: nowrap;
+  }
+}
+
+.chat-message{ 
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 100%;
+  word-break: break-all;
+  &:not(:last-child){
+    margin: 0 0 20px 0;
+  }
+  &__pic{
+    width: 40px;
+    height: 40px;
+    border-radius: 100px;
+  }
+  &__text{
+    font-size: 20px;
+  }
+  &__date{
+    width: 100%;
+    text-align: right;
+  }
+  &__date-friend{
+
+  }
+  &__pic-text-area-friend{
+    display: flex;
+    width: 100%;
+    gap: 15px;
+  }
+  &__pic-text-area{
+    display: flex;
+    justify-content: right;
+    flex-direction: row-reverse;
+    text-align: right;
+    width: 100%;
+    gap: 15px;
   }
 }

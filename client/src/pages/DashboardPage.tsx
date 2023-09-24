@@ -1,10 +1,10 @@
 import axios from "axios";
-import React, {useEffect, useState} from "react";
-import TinderCard from "react-tinder-card";
-import Chat from "../components/Chat";
+import React, {useCallback, useEffect, useState} from "react";
+import Chat from "../components/MiniChat";
 import {useAppSelector} from "../redux/hooks";
 import {getUser} from "../redux/slices";
 import {useAuth} from "../hooks/useAuth";
+import { TinderCardComponent } from "../components/TinderCard";
 
 const DashboardPage = () => {
     const [users, setUsers] = useState<any[]>([])
@@ -24,9 +24,7 @@ const DashboardPage = () => {
         matches
     } = useAppSelector(getUser);
 
-
     useEffect(() => {
-        // todo move filtering to the backend;
         async function getFilteredUsers() {
             const response = await axios.get(
                 "http://localhost:9000/filteredusers",
@@ -36,12 +34,26 @@ const DashboardPage = () => {
                         {
                             gender_interest,
                             age,
+                            email
                         }
                 }
             )
-            return response.data.filter((e: any) => e.email !== email);
+            handleUser({
+                email,
+                first_name,
+                last_name,
+                dob_day,
+                dob_month,
+                dob_year,
+                age,
+                about,
+                gender_identity,
+                gender_interest,
+                pic_url,
+                matches
+            })
+            return response.data
         }
-
         getFilteredUsers().then(setUsers)
     }, [])
 
@@ -76,15 +88,21 @@ const DashboardPage = () => {
         }
     }
 
-    const swiped = (direction: any, email: any) => {
-        if (direction === "right") {
-            addMatch(email)
+    const swiped = useCallback((direction: any, userEmail: string) => {
+        const emails:any[] = []
+        matches.map((e:any) => {
+            emails.push(e.email)
+        })
+        if (direction === "right" && !emails.includes(userEmail)) {
+            addMatch(userEmail);
         }
-    }
+    }, []);
 
     const outOfFrame = (name: any) => {
         console.log(name + ' left the screen!')
     }
+
+
 
     return (
         <section className="dashboard">
@@ -93,25 +111,13 @@ const DashboardPage = () => {
                     <Chat/>
                     <div className="swiper-container">
                         <div className="card-container">
-                            {users?.map((user) =>
-                                <TinderCard className='swipe'
-                                            preventSwipe={["up", "down"]}
-                                            key={user.first_name}
-                                            onSwipe={(dir) => swiped(dir, user.email)}
-                                            onCardLeftScreen={() => outOfFrame(user.first_name)}>
-                                    <div style={{
-                                        backgroundImage: `url(${user.pic_url ===
-                                        "https://www.medqualityassurance.org/views/images/default_user.png"
-                                            ? "https://m.media-amazon.com/images/I/31DhmKeNrWL._AC_UF1000,1000_QL80_.jpg" : user.pic_url})`
-                                    }} className='card'>
-                                        <div>
-                                            <h2 className="card__name">{user.first_name ? user.first_name : "unknown"}</h2>
-                                            <h3 className="card__about">{user.about}</h3>
-                                        </div>
-                                        <h2 className="card__age">{user.age}</h2>
-                                    </div>
-                                </TinderCard>
-                            )}
+                            { users ? users?.map((user) =>
+                                <TinderCardComponent 
+                                user={user}
+                                swiped={swiped} 
+                                key={user.email} 
+                                />
+                            ) : <p>No users left</p>}
                         </div>
                     </div>
                 </div>

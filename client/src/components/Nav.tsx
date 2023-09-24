@@ -4,6 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
 import { useValidation } from "../hooks/useValidation";
 import { signInSchema } from "../schemas/SignInSchema";
+import NavbarLink from "./NavbarLink";
 
 const Nav = () => {
   const { errors, register, handleSubmit, getValues, control } = useValidation({
@@ -41,24 +42,28 @@ const Nav = () => {
             </NavLink>
             <ul className="menu">
               <li className="menu__item">
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive ? "menu__link menu__link--active" : "menu__link"
-                  }
-                  to="/onboarding"
-                >
-                  Onboarding
-                </NavLink>
+                <NavbarLink
+                  activeClass={"menu__link menu__link--active"}
+                  normalClass={"menu__link"}
+                  to={"/onboarding"}
+                  title={"Onboarding"}
+                />
               </li>
               <li className="menu__item">
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive ? "menu__link menu__link--active" : "menu__link"
-                  }
-                  to="/dashboard"
-                >
-                  Dashboard
-                </NavLink>
+                <NavbarLink
+                  activeClass={"menu__link menu__link--active"}
+                  normalClass={"menu__link"}
+                  to={"/dashboard"}
+                  title={"Dashboard"}
+                />
+              </li>
+              <li className="menu__item">
+                <NavbarLink
+                  activeClass={"menu__link menu__link--active"}
+                  normalClass={"menu__link"}
+                  to={"/chat"}
+                  title={"Chat"}
+                />
               </li>
             </ul>
           </div>
