@@ -1,185 +1,89 @@
-import React, { useState } from "react";
+import React from "react";
 import InputText from "../components/inputs/InputText";
 import InputRadio from "../components/inputs/InputRadio";
-import { useValidation } from "../hooks/useValidation";
-import { onboardingSchema } from "../schemas/OnboardingSchema";
-import { useAppSelector } from "../redux/hooks";
-import { getUser } from "../redux/slices";
-import { useAuth } from "../hooks/useAuth";
-import axios from "axios";
+import { useOnboardingPage } from "../hooks/useOnboardingPage";
 
 const OnboardingPage = () => {
-  const [message, setMessage] = useState<string | null>(null);
-  const { handleUser } = useAuth();
-  const user = useAppSelector(getUser);
-
-  const { errors, register, handleSubmit, getValues, control } = useValidation({
-    schema: onboardingSchema,
-    defaultValues: {
-      first_name: user ? user.first_name : "",
-      last_name: user ? user.last_name : "",
-      email: user ? user.email : "",
-      dob_day: user ? user.dob_day : null,
-      dob_month: user ? user.dob_month : null,
-      dob_year: user ? user.dob_year : null,
-      age: user ? user.age : null,
-      about: user ? user.about : "",
-      gender_identity: user ? user.gender_identity : "",
-      gender_interest: user ? user.gender_interest : "",
-      pic_url: user ? user.pic_url : "",
-    },
-  });
-
-  const calculateAge = (dob_day:number, dob_month:number, dob_year: number) => {
-   let now = new Date()
-   let today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-   let dob = new Date(dob_year, dob_month, dob_day)
-   let age = today.getFullYear() - dob_year
-   if (today < dob) {
-      age = age-1
-   }
-   return age
-  };
-
-  const submitFunc = async () => {
-    const {
-      email,
-      first_name,
-      last_name,
-      dob_day,
-      dob_month,
-      dob_year,
-      about,
-      gender_identity,
-      gender_interest,
-      pic_url
-    } = getValues();
-    setMessage(null);
-    try {
-      const actualAge = calculateAge(dob_day, dob_month, dob_year)
-      await axios.put(
-        "http://localhost:9000/updateuser",
-        {
-          first_name,
-          last_name,
-          email,
-          dob_day,
-          dob_month,
-          dob_year,
-          age: actualAge,
-          about,
-          gender_identity,
-          gender_interest,
-          pic_url,
-          matches: user.matches
-        },
-        {
-          withCredentials: true,
-        }
-      );
-      handleUser({
-        first_name,
-        last_name,
-        email,
-        dob_day,
-        dob_month,
-        dob_year,
-        age: actualAge,
-        about,
-        gender_identity,
-        gender_interest,
-        matches: user.matches
-      });
-      setMessage("Profile updated");
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
-    } catch (err) {
-      console.log(err);
-      setMessage("Something went wrong");
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
-    }
-  };
+  const { handleSubmit, submitFunc, control, register, errors, user, message, t } =
+    useOnboardingPage();
 
   return (
     <section className="onboarding">
       <div className="container">
         <div className="onboarding__inner">
-          <h1 className="onboarding__title">Create profile</h1>
+          <h1 className="onboarding__title">{t("create-account")}</h1>
           <form className="auth-form" onSubmit={handleSubmit(submitFunc)}>
             <InputText
-              title={"Your first name"}
+              title={t("first-name")}
               name={"first_name"}
               type={"text"}
               control={control}
-              placeholder={"Type your name"}
+              placeholder={t("first-name-placeholder")}
               register={register}
               error={errors.first_name}
             />
             <InputText
-              title={"Your second name"}
+              title={t("second-name")}
               name={"last_name"}
               type={"text"}
               control={control}
-              placeholder={"Type your second name"}
+              placeholder={t("second-name-placeholder")}
               register={register}
               error={errors.last_name}
             />
             <InputText
-              title={"Email"}
+              title={t("email")}
               name={"email"}
               type={"email"}
               control={control}
-              placeholder={"Type your email"}
+              placeholder={t("email-placeholder")}
               register={register}
               error={errors.email}
             />
             <div className="onboarding__row">
               <InputText
-                title={"Day"}
+                title={t("day")}
                 name={"dob_day"}
                 type={"number"}
                 control={control}
-                placeholder={"Day of birth"}
+                placeholder={t("day-placeholder")}
                 register={register}
                 error={errors.dob_day}
               />
               <InputText
-                title={"Month"}
+                title={t("month")}
                 name={"dob_month"}
                 type={"number"}
                 control={control}
-                placeholder={"Month of birth"}
+                placeholder={t("month-placeholder")}
                 register={register}
                 error={errors.dob_month}
               />
               <InputText
-                title={"Year"}
+                title={t("year")}
                 name={"dob_year"}
                 type={"number"}
                 control={control}
-                placeholder={"Year of birth"}
+                placeholder={t("year-placeholder")}
                 register={register}
                 error={errors.dob_year}
               />
             </div>
             <InputText
-              title={"Bio"}
+              title={t("bio")}
               name={"about"}
               type={"text"}
               control={control}
-              placeholder={"Tell something about yourself"}
+              placeholder={t("bio-placeholder")}
               register={register}
               error={errors.about}
             />
             <InputText
-              title={"Picture"}
+              title={t("picture-url")}
               name={"pic_url"}
               type={"text"}
               control={control}
-              placeholder={"Your picture url"}
+              placeholder={t("picture-url-placeholder")}
               register={register}
               error={errors.pic_url}
             />
@@ -191,17 +95,24 @@ const OnboardingPage = () => {
               />
             </div>
             <InputRadio
-              title={"Gender"}
+              title={t("gender")}
               name={"gender_identity"}
               control={control}
-              values={["Man", "Woman"]}
+              values={[
+                { value: "Man", text: t("man") },
+                { value: "Woman", text: t("woman") },
+              ]}
               register={register}
             />
             <InputRadio
-              title={"Gender interest"}
+              title={t("gender-interest")}
               name={"gender_interest"}
               control={control}
-              values={["Man", "Woman", "Both"]}
+              values={[
+                { value: "Man", text: t("man") },
+                { value: "Woman", text: t("woman") },
+                { value: "Both", text: t("both") },
+              ]}
               register={register}
             />
             <button

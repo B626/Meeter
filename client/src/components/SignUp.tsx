@@ -1,113 +1,85 @@
-import React, { useState } from "react";
-import { signUpSchema } from "../schemas/SignUpSchema";
-import axios from "axios";
+import React from "react";
 import InputText from "./inputs/InputText";
 import InputRadio from "./inputs/InputRadio";
-import { usePopUps } from "../hooks/usePopUps";
-import { useValidation } from "../hooks/useValidation";
+import { useSignUp } from "../hooks/useSignUp";
 
 const SignUp = () => {
-  const { errors, register, handleSubmit, getValues, control, reset } = useValidation({
-    schema: signUpSchema,
-  });
-
-  const { handleSignUpPopup } = usePopUps();
-
-  const [message, setMessage] = useState<string | null>(null);
-
-  const handleCloseSignUpPopup = () => handleSignUpPopup(false);
-
-  const submitFunc = async () => {
-    const { email, password, gender_identity, gender_interest } =
-      getValues();
-    setMessage(null);
-    try {
-      await axios.post(
-        "http://localhost:9000/signup",
-        {
-          email,
-          password,
-          gender_identity,
-          gender_interest,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-      reset({
-        email: "",
-        password: "",
-        password_check: "",
-        gender_identity: "",
-        gender_interest: ""
-      })
-      setMessage("Account created! You can log in now");
-      setTimeout(() => {
-        handleSignUpPopup(false);
-        setMessage(null);
-      }, 5000);
-    } catch (err) {
-      console.log(err);
-      setMessage("Something went wrong");
-    }
-  };
+  const {
+    t,
+    handleCloseSignUpPopup,
+    handleSubmit,
+    submitFunc,
+    control,
+    register,
+    errors,
+    message,
+  } = useSignUp();
 
   return (
-    <div className="auth-popup">
-      <h1 className="auth-popup__title"> Sign up </h1>
-      <button className="auth-popup__close" onClick={handleCloseSignUpPopup}>
-        Close
-      </button>
-      <form className="auth-form" onSubmit={handleSubmit(submitFunc)}>
-        <InputText
-          title={"Email"}
-          name={"email"}
-          type={"email"}
-          control={control}
-          placeholder={"Type your email"}
-          register={register}
-          error={errors.email}
-        />
-        <InputText
-          title={"Password"}
-          name={"password"}
-          type={"password"}
-          control={control}
-          placeholder={"Create your password"}
-          register={register}
-          error={errors.password}
-        />
-        <InputText
-          title={"Confirm Password"}
-          name={"password_check"}
-          type={"password"}
-          control={control}
-          placeholder={"Confirm your password"}
-          register={register}
-          error={errors.password_check}
-        />
-        <InputRadio
-          title={"Gender"}
-          name={"gender_identity"}
-          control={control}
-          values={["Man", "Woman"]}
-          register={register}
-        />
-        <InputRadio
-          title={"Gender interest"}
-          name={"gender_interest"}
-          control={control}
-          values={["Man", "Woman", "Both"]}
-          register={register}
-        />
-        <button
-          className="primary-button auth-popup__signup-button"
-          type="submit"
-        >
-          Create account
+    <div className="auth-popup__wrapper">
+      <div className="auth-popup">
+        <h1 className="auth-popup__title"> {t("sign-up-popup-title")} </h1>
+        <button className="auth-popup__close" onClick={handleCloseSignUpPopup}>
+          {t("close-popup")}
         </button>
-        <p className="auth-popup__error">{message}</p>
-      </form>
+        <form className="auth-form" onSubmit={handleSubmit(submitFunc)}>
+          <InputText
+            title={t("email")}
+            name={"email"}
+            type={"email"}
+            control={control}
+            placeholder={t("email-placeholder")}
+            register={register}
+            error={errors.email}
+          />
+          <InputText
+            title={t("password")}
+            name={"password"}
+            type={"password"}
+            control={control}
+            placeholder={t("password-placeholder")}
+            register={register}
+            error={errors.password}
+          />
+          <InputText
+            title={t("password-check")}
+            name={"password_check"}
+            type={"password"}
+            control={control}
+            placeholder={t("password-check-placeholder")}
+            register={register}
+            error={errors.password_check}
+          />
+          <InputRadio
+            title={t("gender")}
+            name={"gender_identity"}
+            control={control}
+            values={[
+              { value: "Man", text: t("man") },
+              { value: "Woman", text: t("woman") },
+            ]}
+            register={register}
+          />
+          <InputRadio
+            title={t("gender-interest")}
+            name={"gender_interest"}
+            control={control}
+            values={[
+              { value: "Men", text: t("men") },
+              { value: "Women", text: t("women") },
+              { value: "Both", text: t("both") },
+            ]}
+            register={register}
+          />
+          <button
+            className="primary-button auth-popup__signup-button"
+            type="submit"
+          >
+            {t("create-account")}
+          </button>
+          <p className="auth-popup__error">{message}</p>
+        </form>
+      </div>
     </div>
   );
 };

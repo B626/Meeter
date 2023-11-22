@@ -21,7 +21,6 @@ export const TinderCardComponent =
                 }} className='card'>
                     <div>
                         <h2 className="card__name">{user.first_name ? user.first_name : "unknown"}</h2>
-                        <h3 className="card__about">{user.about}</h3>
                     </div>
                     <h2 className="card__age">{user.age}</h2>
                 </div>

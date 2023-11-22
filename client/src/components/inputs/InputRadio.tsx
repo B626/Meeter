@@ -5,7 +5,7 @@ interface InputRadioProps {
   title: string
   name: string,
   control: any,
-  values: String[],
+  values: Object[],
   register: Function
 }
 
@@ -24,16 +24,16 @@ const InputRadio = ({
     name,
     control
   });
-
+  console.log(values)
   return (
     <label className="auth-form__row auth-form-gender-radio">
       {title}
       <div className="auth-form__radio-inputs">
-        {values.map((e, i) => {
-          const valueLoweredCase = e.toLowerCase();
+        {values.map((e:any, i:any) => {
+          const valueLoweredCase = e.value.toLowerCase();
           return (
             <div key={i} className="auth-form__radio">
-              <label htmlFor={valueLoweredCase}>{e}</label>
+              <label htmlFor={valueLoweredCase}>{e.text}</label>
               <input
                 {...register(name)}
                 {...field}

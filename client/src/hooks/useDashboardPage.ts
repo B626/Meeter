@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import {useAuth} from "./useAuth";
 import {useAppSelector} from "../redux/hooks";
@@ -21,7 +21,6 @@ export const useDashboardPage = () => {
         pic_url,
         matches
     } = useAppSelector(getUser);
-
     useEffect(() => {
         async function getFilteredUsers() {
             const response = await axios.get(
@@ -87,9 +86,18 @@ export const useDashboardPage = () => {
         }
     }
 
+    const swiped = useCallback((direction: any, userEmail: string) => {
+    const emails = matches.map((e: any) => e.email);
+
+    if (direction === "right" && !emails.includes(userEmail)) {
+        addMatch(userEmail);
+    }
+    }, []);
+
     return {
         matches,
         users,
-        addMatch
+        addMatch,
+        swiped
     }
 }

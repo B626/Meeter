@@ -1,40 +1,54 @@
 import React from "react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { usePopUps } from "../hooks/usePopUps";
-import { useAuth } from "../hooks/useAuth";
+import { NavLink } from "react-router-dom";
+import { useLoginNav } from "../hooks/useLoginNav";
 
 const LoginNav = () => {
-  const { handleSignInPopup, handleSignUpPopup, signUpPopup, signInPopup } =
-    usePopUps();
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
-  const { handleIsAuth } = useAuth();
-  const handleLoginButtonState = () =>
-    !!((signUpPopup && pathname === "/") || signInPopup);
-
-  const handleSignIn = () => {
-    handleIsAuth(true)
-    handleSignInPopup(true);
-    handleSignUpPopup(false);
-    navigate("/");
-  };
+  const {
+    setLanguage,
+    selectedLanguage,
+    handleLoginButtonState,
+    handleSignIn,
+    t
+  } = useLoginNav();
+  
   return (
-    <nav className="nav">
+    <nav className="login-nav">
       <div className="container">
-        <div className="nav__inner">
-          <div className="nav__left">
+        <div className="login-nav__inner">
+          <div className="login-nav__left">
             <NavLink className="logo" to={"/"}>
               <p className="logo__text">Meeter</p>
             </NavLink>
           </div>
-          <div className="nav__right">
-            <button className="nav__link">Language</button>
+          <div className="login-nav__right">
+            <div className="login-nav__language-area">
+              <button
+                onClick={() => setLanguage("en")}
+                className={
+                  selectedLanguage === "en"
+                    ? "login-nav__language-choice nav__language-choice--active"
+                    : "login-nav__language-choice"
+                }
+              >
+                EN
+              </button>
+              <button
+                onClick={() => setLanguage("ua")}
+                className={
+                  selectedLanguage === "ua"
+                    ? "login-nav__language-choice nav__language-choice--active"
+                    : "login-nav__language-choice"
+                }
+              >
+                UA
+              </button>
+            </div>
             <button
               disabled={handleLoginButtonState()}
               className="primary-button"
               onClick={handleSignIn}
             >
-              Sign in
+              {t("sign-in")}
             </button>
           </div>
         </div>

@@ -8,6 +8,7 @@ import OnboardingPage from "./pages/OnboardingPage";
 import MainPage from "./pages/MainPage";
 import UserDisplayPage from "./pages/UserDisplay";
 import ChatPage from "./pages/ChatPage";
+import AdminPage from "./pages/AdminPage";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/user" element={<UserDisplayPage />} />
         <Route path="/chat" element={<ChatPage />} />
+        <Route path="/admin" element={<AdminPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />

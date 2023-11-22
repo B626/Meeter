@@ -1,60 +1,58 @@
-import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-import axios from "axios";
-import { useValidation } from "../hooks/useValidation";
-import { signInSchema } from "../schemas/SignInSchema";
+import React, { useState } from "react";
 import NavbarLink from "./NavbarLink";
+import { useNav } from "../hooks/useNav";
+import { NavLink } from "react-router-dom";
+import { useAppSelector } from "../redux/hooks";
+import { getUser } from "../redux/slices";
 
 const Nav = () => {
-  const { errors, register, handleSubmit, getValues, control } = useValidation({
-    schema: signInSchema,
-  });
-  const { handleIsAuth, handleUser } = useAuth();
-  const navigate = useNavigate();
-  const handleLogOut = async () => {
-    const { email, password } = getValues();
-    try {
-      await axios.post(
-        "http://localhost:9000/logout",
-        {
-          email,
-          password,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-      handleIsAuth(false);
-      handleUser({});
-      navigate("/");
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const {t,isAdmin, setLanguage, selectedLanguage, handleLogOut} = useNav()
+
+  const [burgerMenu, showBurgerMenu] = useState<any>(false)
+
+  const user = useAppSelector(getUser)
+
+  const closeIcon = "https://cdn-icons-png.flaticon.com/128/61/61155.png"
+  const burgerIcon = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/2048px-Hamburger_icon.svg.png"
+
   return (
-    <div className="nav login-nav">
+    <div className="nav">
       <div className="container">
-        <div className="login-nav__inner">
-          <div className="login-nav__left">
-            <NavLink className="login-nav__logo" to="/main">
-              Nav
+        <div className="nav__inner">
+          <div className="nav__left">
+          <div className="nav__burger-menu-button-area">
+            <button onClick={() => showBurgerMenu((prev:boolean) => !prev)} className="nav__burger-menu-button">
+              {
+                burgerMenu ?
+                <p>{t("close")}</p> :
+                <img className="nav__burger-img" src={burgerIcon} alt="" />
+              }
+              
+            </button>
+          </div>
+            <NavLink className="nav__user" to="/onboarding">
+              <img
+                src={user.pic_url}
+                className="nav__user-pic"
+                alt="Profile picture"
+              />
+              <p className="nav__user-name">{user.first_name}</p>
             </NavLink>
             <ul className="menu">
-              <li className="menu__item">
+              {/* <li className="menu__item">
                 <NavbarLink
                   activeClass={"menu__link menu__link--active"}
                   normalClass={"menu__link"}
                   to={"/onboarding"}
-                  title={"Onboarding"}
+                  title={t("onboarding-page")}
                 />
-              </li>
+              </li> */}
               <li className="menu__item">
                 <NavbarLink
                   activeClass={"menu__link menu__link--active"}
                   normalClass={"menu__link"}
                   to={"/dashboard"}
-                  title={"Dashboard"}
+                  title={t("dashboard-page")}
                 />
               </li>
               <li className="menu__item">
@@ -62,16 +60,93 @@ const Nav = () => {
                   activeClass={"menu__link menu__link--active"}
                   normalClass={"menu__link"}
                   to={"/chat"}
-                  title={"Chat"}
+                  title={t("chat-page")}
                 />
               </li>
+              {isAdmin ? (
+                <li className="menu__item">
+                  <NavbarLink
+                    activeClass={"menu__link menu__link--active"}
+                    normalClass={"menu__link"}
+                    to={"/admin"}
+                    title={t("admin-page")}
+                  />
+                </li>
+              ) : (
+                <></>
+              )}
             </ul>
           </div>
-          <button className="primary-button" onClick={handleLogOut}>
-            Log out
+          <div className="nav__language-area">
+            <button
+              onClick={() => setLanguage("en")}
+              className={
+                selectedLanguage === "en"
+                  ? "nav__language-choice nav__language-choice--active"
+                  : "nav__language-choice"
+              }
+            >
+              EN
+            </button>
+            <button
+              onClick={() => setLanguage("ua")}
+              className={
+                selectedLanguage === "ua"
+                  ? "nav__language-choice nav__language-choice--active"
+                  : "nav__language-choice"
+              }
+            >
+              UA
+            </button>
+          </div>
+          <button className="nav__button primary-button" onClick={handleLogOut}>
+            {t("log-out")}
           </button>
         </div>
       </div>
+      {
+        burgerMenu && 
+        <div className="burger-menu">
+          <ul className="burger-menu-links">
+              {/* <li className="menu__item">
+                <NavbarLink
+                  activeClass={"menu__link menu__link--active"}
+                  normalClass={"menu__link"}
+                  to={"/onboarding"}
+                  title={t("onboarding-page")}
+                />
+              </li> */}
+              <li onClick={() => showBurgerMenu(false)} className="menu__item burger-item">
+                <NavbarLink
+                  activeClass={"menu__link menu__link--active burger-link"}
+                  normalClass={"menu__link burger-link"}
+                  to={"/dashboard"}
+                  title={t("dashboard-page")}
+                />
+              </li>
+              <li onClick={() => showBurgerMenu(false)} className="menu__item burger-item">
+                <NavbarLink
+                  activeClass={"menu__link menu__link--active burger-link"}
+                  normalClass={"menu__link burger-link"}
+                  to={"/chat"}
+                  title={t("chat-page")}
+                />
+              </li>
+              {isAdmin ? (
+                <li onClick={() => showBurgerMenu(false)} className="menu__item burger-item">
+                  <NavbarLink
+                    activeClass={"menu__link menu__link--active burger-link"}
+                    normalClass={"menu__link burger-link"}
+                    to={"/admin"}
+                    title={t("admin-page")}
+                  />
+                </li>
+              ) : (
+                <></>
+              )}
+            </ul>
+        </div>
+      }
     </div>
   );
 };

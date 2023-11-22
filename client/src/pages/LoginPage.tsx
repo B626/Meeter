@@ -2,45 +2,41 @@ import React from "react";
 
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
-
-import {usePopUps} from "../hooks/usePopUps";
-import {useAuth} from "../hooks/useAuth";
 import LoginNav from "../components/LoginNav";
 import Footer from "../components/Footer";
 
-const LoginPage = () => {
-    const {handleSignInPopup, handleSignUpPopup, signUpPopup, signInPopup} =
-        usePopUps();
-    const {isAuth} = useAuth();
+import { useLoginPage } from "../hooks/useLoginPage";
 
+const LoginPage = () => {
+    const {isAuth, t, handleSignInPopup, signInPopup, handleSignUpPopup, signUpPopup} = useLoginPage()
     return (
-        <>
-            <section className="login">
-                <LoginNav/>
-                <div className="login__body">
-                    <h1 className="login__title primary-h1">Find your match</h1>
-                    {isAuth ? (
-                        <button
-                            className="login__button primary-button"
-                            onClick={() => handleSignInPopup(true)}
-                        >
-                            Sign in
-                        </button>
-                    ) : (
-                        <button
-                            className="login__button primary-button"
-                            disabled={!!signInPopup}
-                            onClick={() => handleSignUpPopup(true)}
-                        >
-                            Sign up
-                        </button>
-                    )}
-                    {signUpPopup && <SignUp/>}
-                    {signInPopup && <SignIn/>}
-                </div>
-            </section>
-            <Footer/>
-        </>
+      <>
+        <section className="login">
+          <LoginNav />
+          <div className="login__body">
+            <h1 className="login__title primary-h1">{t("login-h1")}</h1>
+            {isAuth ? (
+              <button
+                className="login__button primary-button"
+                onClick={() => handleSignInPopup(true)}
+              >
+                {t("sign-in")}
+              </button>
+            ) : (
+              <button
+                className="login__button primary-button"
+                disabled={!!signInPopup}
+                onClick={() => handleSignUpPopup(true)}
+              >
+                {t("sign-up")}
+              </button>
+            )}
+            {signUpPopup && <SignUp />}
+            {signInPopup && <SignIn />}
+          </div>
+        </section>
+        <Footer />
+      </>
     );
 };
 

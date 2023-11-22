@@ -3,6 +3,10 @@
   overflow: hidden;
 }
 
+a {
+  text-decoration: none;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -62,15 +66,16 @@ body {
 }
 
 .nav {
+  position: static;
   width: 100%;
   padding: 20px 0;
-  position: absolute;
   z-index: 2;
 }
 .nav__inner {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .nav__left {
   display: flex;
@@ -89,9 +94,106 @@ body {
   font-size: 18px;
   cursor: pointer;
 }
+.nav__burger-menu-button-area {
+  display: none;
+}
+.nav__burger-menu-button {
+  background-color: #fff;
+  border: none;
+  position: relative;
+  z-index: 3;
+}
+.nav__burger-img {
+  width: 40px;
+}
+.nav__language-area {
+  display: flex;
+  align-self: center;
+}
+.nav__language-choice {
+  background: transparent;
+  font-size: 20px;
+  border: none;
+  padding: 5px;
+  font-weight: 700;
+  color: #000;
+  cursor: pointer;
+}
+.nav__language-choice--active {
+  text-decoration: underline;
+}
+.nav__logo {
+  display: flex;
+}
+.nav__user {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.nav__user-pic {
+  width: 60px;
+  height: 60px;
+  border-radius: 100px;
+}
+.nav__user-name {
+  font-size: 30px;
+  color: #000;
+  text-decoration: none !important;
+}
 
+@media (max-width: 420px) {
+  .container {
+    padding: 0 10px;
+  }
+  .swipe {
+    max-width: 100%;
+  }
+  .nav__user {
+    display: none;
+  }
+  .nav__language-choice {
+    font-size: 30px;
+  }
+  .card {
+    max-width: 100% !important;
+  }
+  .card__name {
+    font-size: 60px !important;
+    bottom: 10px !important;
+  }
+  .card__age {
+    font-size: 60px !important;
+    bottom: 10px !important;
+  }
+}
+.burger-menu {
+  height: 100vh;
+  width: 100%;
+  background-color: #000;
+  position: fixed;
+  z-index: 2;
+  top: 0;
+}
+
+@media (max-width: 1020px) {
+  .nav__left {
+    gap: 20px;
+  }
+}
+@media (max-width: 820px) {
+  .menu {
+    display: none !important;
+  }
+  .nav__burger-menu-button-area {
+    display: block;
+  }
+}
 .login-nav {
-  position: static;
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  padding: 20px 0;
 }
 .login-nav__inner {
   display: flex;
@@ -102,13 +204,41 @@ body {
   align-items: center;
   gap: 40px;
 }
+.login-nav__right {
+  display: flex;
+  gap: 50px;
+}
 .login-nav__logo {
   color: #000;
   font-size: 40px;
   text-decoration: none;
   font-weight: 700;
 }
+.login-nav__language-area {
+  display: flex;
+  align-self: center;
+}
+.login-nav__language-choice {
+  background: transparent;
+  font-size: 20px;
+  border: none;
+  padding: 5px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+}
+.login-nav__language-choice--active {
+  text-decoration: underline;
+}
 
+@media (max-width: 520px) {
+  .login-nav__right {
+    gap: 20px;
+  }
+  .messages-area__input-area {
+    flex-direction: column;
+  }
+}
 .logo {
   text-decoration: none;
   color: #fff;
@@ -118,6 +248,7 @@ body {
 }
 .menu {
   display: flex;
+  align-items: center;
   gap: 40px;
 }
 .menu__item {
@@ -132,6 +263,24 @@ body {
   text-decoration: underline;
 }
 
+.burger-link {
+  color: #fff;
+}
+
+.burger-item {
+  position: relative;
+  z-index: 3;
+}
+
+.burger-menu-links {
+  padding: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  color: #fff;
+  font-size: 50px;
+}
+
 .login {
   height: 100vh;
   display: flex;
@@ -141,6 +290,7 @@ body {
 }
 .login__title {
   margin: 0 0 10px 0;
+  text-align: center;
 }
 .login__inner {
   height: 100%;
@@ -154,12 +304,84 @@ body {
   flex-direction: column;
 }
 .login__button {
-  width: 150px;
+  width: 200px;
   margin: 0 auto;
 }
 
+@media (max-width: 1220px) {
+  .container {
+    max-width: 1000px;
+  }
+}
+@media (max-width: 1020px) {
+  .container {
+    max-width: 800px;
+  }
+  .chat {
+    padding-bottom: 75px;
+  }
+}
+@media (max-width: 820px) {
+  .container {
+    max-width: 600px;
+  }
+}
+@media (max-width: 620px) {
+  .container {
+    max-width: 500px;
+  }
+  .chat__matches-bar {
+    max-height: 400px;
+  }
+  .chat__messages {
+    height: 255px;
+  }
+}
+@media (max-width: 520px) {
+  .container {
+    max-width: 400px;
+  }
+  .chat-contact__name {
+    font-size: 20px !important;
+  }
+  .chat-message {
+    gap: 5px;
+  }
+  .chat-message__text {
+    font-size: 16px;
+  }
+  .chat-message:not(:last-child) {
+    margin: 0 0 10px 0;
+  }
+}
+@media (max-width: 420px) {
+  .container {
+    max-width: 390px !important;
+  }
+  .chat__messages-bar {
+    padding-right: 18px !important;
+  }
+  .chat__messages {
+    padding: 5px !important;
+  }
+  .messages-area {
+    padding: 0 4px !important;
+  }
+  .messages-area__contact-name {
+    font-size: 35px !important;
+    text-align: center;
+  }
+  .messages-area__button {
+    padding: 10px 15px !important;
+  }
+  .chat-message__pic-text-area {
+    background-color: #f6f6f6;
+    border-radius: 56px;
+    padding: 5px;
+  }
+}
 .auth-popup {
-  position: absolute;
+  position: relative;
   background-color: #fff;
   height: auto;
   text-align: center;
@@ -190,7 +412,19 @@ body {
   font-size: 20px;
   font-weight: 500;
 }
+.auth-popup__wrapper {
+  width: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+@media (max-width: 520px) {
+  .auth-popup {
+    width: 400px;
+  }
+}
 .auth-form__row {
   width: 100%;
   display: flex;
@@ -242,6 +476,9 @@ body {
   margin: 0 0 10px 0;
 }
 
+.onboarding {
+  position: relative;
+}
 .onboarding__row {
   display: flex;
   width: 100%;
@@ -272,6 +509,24 @@ body {
   font-weight: 500;
 }
 
+@media (max-width: 520px) {
+  .onboarding__profile-pic {
+    width: 100%;
+  }
+  .onboarding__title {
+    padding: 0 0 50px 0;
+  }
+  .nav__user {
+    gap: 10px;
+  }
+  .nav__button {
+    display: none;
+  }
+  .nav__inner {
+    justify-content: center;
+    gap: 30px;
+  }
+}
 .footer {
   position: absolute;
   bottom: -80px;
@@ -301,7 +556,6 @@ body {
   background-color: #fff;
   width: 460px;
   height: 610px;
-  box-shadow: 0px 0px 60px 0px rgba(0, 0, 0, 0.3);
   border-radius: 20px;
   background-size: cover;
   background-position: center;
@@ -342,6 +596,11 @@ body {
   text-shadow: 2px 2px 7px rgb(81, 81, 81);
 }
 
+@media (max-width: 520px) {
+  .card {
+    width: 400px;
+  }
+}
 .cardContent {
   width: 100%;
   height: 100%;
@@ -349,6 +608,20 @@ body {
 
 .dashboard__inner {
   display: flex;
+}
+
+.chat-contact--active {
+  cursor: pointer;
+  height: 100px;
+  border-bottom: 1px solid #000;
+  background-color: #97ff97;
+}
+.chat-contact--active__name {
+  font-size: 30px;
+  padding: 10px;
+}
+.chat-contact--active:hover {
+  background-color: #f0f0f0;
 }
 
 .chat-contact {
@@ -364,64 +637,64 @@ body {
   background-color: #f0f0f0;
 }
 
-.mini-chat {
+.matches {
   width: 550px;
   background-color: rgb(226, 226, 226);
 }
-.mini-chat__top {
+.matches__top {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 30px;
   height: 15%;
 }
-.mini-chat__body {
+.matches__body {
   padding: 10px 30px;
   height: 85%;
   position: relative;
 }
-.mini-chat__pic-wrapper {
+.matches__pic-wrapper {
   max-width: 80px;
   max-height: 80px;
 }
-.mini-chat__pic {
+.matches__pic {
   width: 80px;
   height: 80px;
   border-radius: 60px;
 }
-.mini-chat__username {
+.matches__username {
   font-size: 30px;
 }
-.mini-chat__navigation {
+.matches__navigation {
   margin: 0 0 20px 0;
   display: flex;
   gap: 20px;
 }
-.mini-chat__nav-link {
+.matches__nav-link {
   font-size: 20px;
   cursor: pointer;
 }
-.mini-chat__nav-link--active {
+.matches__nav-link--active {
   font-size: 20px;
   text-decoration: underline;
   cursor: pointer;
 }
-.mini-chat__messages {
+.matches__messages {
   height: 290px;
   overflow-x: hidden;
   overflow-y: auto;
   padding: 20px 10px;
 }
-.mini-chat__message {
+.matches__message {
   display: flex;
   align-items: flex-start;
   flex-direction: column;
   gap: 10px;
 }
-.mini-chat__message:not(:last-child) {
+.matches__message:not(:last-child) {
   margin: 0 0 20px 0;
 }
-.mini-chat__message-area {
+.matches__message-area {
   display: flex;
   justify-content: right;
   flex-direction: row-reverse;
@@ -429,19 +702,19 @@ body {
   width: 100%;
   gap: 15px;
 }
-.mini-chat__message-date {
+.matches__message-date {
   width: 100%;
   text-align: right;
 }
-.mini-chat__message-area-friend {
+.matches__message-area-friend {
   display: flex;
   width: 100%;
   gap: 15px;
 }
-.mini-chat__message-text {
+.matches__message-text {
   font-size: 30px;
 }
-.mini-chat__input-area {
+.matches__input-area {
   position: absolute;
   display: flex;
   justify-content: space-between;
@@ -449,22 +722,32 @@ body {
   right: 10px;
   left: 10px;
 }
-.mini-chat__input-area textarea {
+.matches__input-area textarea {
   resize: none;
   height: 100px;
   width: 60%;
 }
-.mini-chat__message-receiver-name {
+.matches__message-receiver-name {
   font-size: 40px;
   text-align: center;
   margin: 0 0 10px 0;
 }
-.mini-chat__user-pic {
+.matches__user-pic {
   width: 50px;
   height: 50px;
   border-radius: 100px;
 }
+.matches__title {
+  font-size: 40px;
+  text-align: center;
+  margin: 0 0 30px 0;
+}
 
+@media (max-width: 1020px) {
+  .matches {
+    display: none;
+  }
+}
 .chat {
   height: 100%;
 }
@@ -474,19 +757,23 @@ body {
 .chat__matches-bar {
   width: 30%;
   border-right: 1px solid #000;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 600px;
 }
 .chat__messages-bar {
   width: 70%;
 }
 .chat__messages {
   width: 100%;
-  height: 330px;
+  height: 400px;
   overflow-x: hidden;
   overflow-y: auto;
   padding: 20px;
+  overflow-anchor: none;
 }
 
-.matches {
+.matched-users {
   overflow-x: hidden;
   overflow-y: auto;
   max-height: 500px;
@@ -494,6 +781,8 @@ body {
 
 .match {
   display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
   gap: 20px;
 }
 .match__pic {
@@ -501,14 +790,28 @@ body {
   height: 80px;
   border-radius: 100px;
 }
+.match__button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
 .match__name {
   font-size: 30px;
   text-decoration: none;
   color: #000;
   display: block;
 }
+.match__left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
 .match:not(:last-child) {
   margin: 0 0 20px 0;
+}
+.match__delete-img {
+  width: 30px;
+  height: 30px;
 }
 
 .messages-area {
@@ -562,6 +865,10 @@ body {
   width: 100%;
   text-align: right;
 }
+.chat-message__big-date {
+  width: 100%;
+  text-align: center;
+}
 .chat-message__pic-text-area-friend {
   display: flex;
   width: 100%;
@@ -574,4 +881,8 @@ body {
   text-align: right;
   width: 100%;
   gap: 15px;
+}
+
+.adminpage-user:not(:last-child) {
+  margin: 0 0 20px 0;
 }

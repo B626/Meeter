@@ -1,30 +1,16 @@
 import React, {useCallback} from "react";
-import Chat from "../components/MiniChat";
 import {TinderCardComponent} from "../components/TinderCard";
 import {useDashboardPage} from "../hooks/useDashboardPage";
+import Matches from "../components/Matches";
 
 const DashboardPage = () => {
-    const {matches, addMatch, users} = useDashboardPage();
-
-
-    const swiped = useCallback((direction: any, userEmail: string) => {
-        const emails = matches.map((e: any) => e.email);
-
-        if (direction === "right" && !emails.includes(userEmail)) {
-            addMatch(userEmail);
-        }
-    }, []);
-
-    const outOfFrame = (name: any) => {
-        console.log(name + ' left the screen!')
-    }
-
+    const {matches, addMatch, users, swiped} = useDashboardPage();
 
     return (
         <section className="dashboard">
             <div className="container">
                 <div className="dashboard__inner">
-                    <Chat/>
+                    <Matches/>
                     <div className="swiper-container">
                         <div className="card-container">
                             {users.length ? users.map((user) =>
